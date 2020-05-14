@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.saiyun.mapper.ReceptionAccountMapper">
+  <resultMap id="BaseResultMap" type="com.saiyun.model.ReceptionAccount">
+    <id column="account_id"  property="accountId" />
+    <result column="user_id"  property="userId" />
+    <result column="type"  property="type" />
+    <result column="name"  property="name" />
+    <result column="account"  property="account" />
+    <result column="img_url"  property="imgUrl" />
+    <result column="status"  property="status" />
+    <result column="bankname"  property="bankname" />
+    <result column="bank_address"  property="bankAddress" />
+    <result column="createdate"  property="createdate" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    account_id, user_id, type, name, account, img_url, status, bankname, bank_address, createdate
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from reception_account
+    where account_id = #{accountId}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from reception_account
+    where account_id = #{accountId}
+  </delete>
+  <insert id="insert" parameterType="com.saiyun.model.ReceptionAccount">
+    insert into reception_account (account_id, user_id, type, 
+      name, account, img_url, 
+      status, bankname, bank_address,createdate
+      )
+    values (#{accountId}, #{userId}, #{type}, 
+      #{name}, #{account}, #{imgUrl}, 
+      #{status}, #{bankname}, #{bankAddress},#{createdate}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.saiyun.model.ReceptionAccount">
+    insert into reception_account
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="accountId != null">
+        account_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="account != null">
+        account,
+      </if>
+      <if test="imgUrl != null">
+        img_url,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="bankname != null">
+        bankname,
+      </if>
+      <if test="bankAddress != null">
+        bank_address,
+      </if>
+      <if test="createdate != null">
+        createdate,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="accountId != null">
+        #{accountId},
+      </if>
+      <if test="userId != null">
+        #{userId},
+      </if>
+      <if test="type != null">
+        #{type},
+      </if>
+      <if test="name != null">
+        #{name},
+      </if>
+      <if test="account != null">
+        #{account},
+      </if>
+      <if test="imgUrl != null">
+        #{imgUrl},
+      </if>
+      <if test="status != null">
+        #{status},
+      </if>
+      <if test="bankname != null">
+        #{bankname},
+      </if>
+      <if test="bankAddress != null">
+        #{bankAddress},
+      </if>
+      <if test="createdate != null">
+        #{createdate},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.saiyun.model.ReceptionAccount">
+    update reception_account
+    <set>
+      <if test="userId != null">
+        user_id = #{userId},
+      </if>
+      <if test="type != null">
+        type = #{type},
+      </if>
+      <if test="name != null">
+        name = #{name},
+      </if>
+      <if test="account != null">
+        account = #{account},
+      </if>
+      <if test="imgUrl != null">
+        img_url = #{imgUrl},
+      </if>
+      <if test="status != null">
+        status = #{status},
+      </if>
+      <if test="bankname != null">
+        bankname = #{bankname},
+      </if>
+      <if test="bankAddress != null">
+        bank_address = #{bankAddress},
+      </if><if test="createdate != null">
+      createdate = #{createdate},
+      </if>
+    </set>
+    where account_id = #{accountId}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.saiyun.model.ReceptionAccount">
+    update reception_account
+    set user_id = #{userId},
+      type = #{type},
+      name = #{name},
+      account = #{account},
+      img_url = #{imgUrl},
+      status = #{status},
+      bankname = #{bankname},
+      bank_address = #{bankAddress},
+      createdate = #{createdate}
+    where account_id = #{accountId}
+  </update>
+</mapper>

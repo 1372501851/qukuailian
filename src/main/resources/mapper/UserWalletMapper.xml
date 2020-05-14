@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.saiyun.mapper.UserWalletMapper">
+  <resultMap id="BaseResultMap" type="com.saiyun.model.UserWallet">
+    <id column="user_wallet_id"  property="userWalletId" />
+    <result column="user_id"  property="userId" />
+    <result column="address"  property="address" />
+    <result column="state"  property="state" />
+    <result column="date"  property="date" />
+    <result column="btc_balance"  property="btcBalance" />
+    <result column="btc_unbalance"  property="btcUnbalance" />
+    <result column="flag"  property="flag" />
+    <result column="recountbalance"  property="recountbalance" />
+    <result column="balance_backup"  property="balanceBackup" />
+    <result column="pay_status"  property="payStatus" />
+    <result column="wallet_state"  property="walletState" />
+    <result column="usdt_balance"  property="usdtBalance" />
+    <result column="usdt_unbalance"  property="usdtUnbalance" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    user_wallet_id, user_id, address, state, date, btc_balance, btc_unbalance, flag, 
+    recountbalance, balance_backup, pay_status, wallet_state, usdt_balance, usdt_unbalance
+  </sql>
+  <select id="selectOneByUserId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from user_wallet
+    where user_id = #{userId}
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from user_wallet
+    where user_wallet_id = #{userWalletId}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from user_wallet
+    where user_wallet_id = #{userWalletId}
+  </delete>
+  <insert id="insert" parameterType="com.saiyun.model.UserWallet">
+    insert into user_wallet (user_wallet_id, user_id, address, 
+      state, date, btc_balance, 
+      btc_unbalance, flag, recountbalance, 
+      balance_backup, pay_status, wallet_state, 
+      usdt_balance, usdt_unbalance)
+    values (#{userWalletId}, #{userId}, #{address}, 
+      #{state}, #{date}, #{btcBalance}, 
+      #{btcUnbalance}, #{flag}, #{recountbalance}, 
+      #{balanceBackup}, #{payStatus}, #{walletState}, 
+      #{usdtBalance}, #{usdtUnbalance})
+  </insert>
+  <insert id="insertSelective" parameterType="com.saiyun.model.UserWallet">
+    insert into user_wallet
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userWalletId != null">
+        user_wallet_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="address != null">
+        address,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+      <if test="date != null">
+        date,
+      </if>
+      <if test="btcBalance != null">
+        btc_balance,
+      </if>
+      <if test="btcUnbalance != null">
+        btc_unbalance,
+      </if>
+      <if test="flag != null">
+        flag,
+      </if>
+      <if test="recountbalance != null">
+        recountbalance,
+      </if>
+      <if test="balanceBackup != null">
+        balance_backup,
+      </if>
+      <if test="payStatus != null">
+        pay_status,
+      </if>
+      <if test="walletState != null">
+        wallet_state,
+      </if>
+      <if test="usdtBalance != null">
+        usdt_balance,
+      </if>
+      <if test="usdtUnbalance != null">
+        usdt_unbalance,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userWalletId != null">
+        #{userWalletId},
+      </if>
+      <if test="userId != null">
+        #{userId},
+      </if>
+      <if test="address != null">
+        #{address},
+      </if>
+      <if test="state != null">
+        #{state},
+      </if>
+      <if test="date != null">
+        #{date},
+      </if>
+      <if test="btcBalance != null">
+        #{btcBalance},
+      </if>
+      <if test="btcUnbalance != null">
+        #{btcUnbalance},
+      </if>
+      <if test="flag != null">
+        #{flag},
+      </if>
+      <if test="recountbalance != null">
+        #{recountbalance},
+      </if>
+      <if test="balanceBackup != null">
+        #{balanceBackup},
+      </if>
+      <if test="payStatus != null">
+        #{payStatus},
+      </if>
+      <if test="walletState != null">
+        #{walletState},
+      </if>
+      <if test="usdtBalance != null">
+        #{usdtBalance},
+      </if>
+      <if test="usdtUnbalance != null">
+        #{usdtUnbalance},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.saiyun.model.UserWallet">
+    update user_wallet
+    <set>
+      <if test="userId != null">
+        user_id = #{userId},
+      </if>
+      <if test="address != null">
+        address = #{address},
+      </if>
+      <if test="state != null">
+        state = #{state},
+      </if>
+      <if test="date != null">
+        date = #{date},
+      </if>
+      <if test="btcBalance != null">
+        btc_balance = #{btcBalance},
+      </if>
+      <if test="btcUnbalance != null">
+        btc_unbalance = #{btcUnbalance},
+      </if>
+      <if test="flag != null">
+        flag = #{flag},
+      </if>
+      <if test="recountbalance != null">
+        recountbalance = #{recountbalance},
+      </if>
+      <if test="balanceBackup != null">
+        balance_backup = #{balanceBackup},
+      </if>
+      <if test="payStatus != null">
+        pay_status = #{payStatus},
+      </if>
+      <if test="walletState != null">
+        wallet_state = #{walletState},
+      </if>
+      <if test="usdtBalance != null">
+        usdt_balance = #{usdtBalance},
+      </if>
+      <if test="usdtUnbalance != null">
+        usdt_unbalance = #{usdtUnbalance},
+      </if>
+    </set>
+    where user_wallet_id = #{userWalletId}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.saiyun.model.UserWallet">
+    update user_wallet
+    set user_id = #{userId},
+      address = #{address},
+      state = #{state},
+      date = #{date},
+      btc_balance = #{btcBalance},
+      btc_unbalance = #{btcUnbalance},
+      flag = #{flag},
+      recountbalance = #{recountbalance},
+      balance_backup = #{balanceBackup},
+      pay_status = #{payStatus},
+      wallet_state = #{walletState},
+      usdt_balance = #{usdtBalance},
+      usdt_unbalance = #{usdtUnbalance}
+    where user_wallet_id = #{userWalletId}
+  </update>
+</mapper>

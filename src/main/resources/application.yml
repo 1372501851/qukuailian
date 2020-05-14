@@ -75,13 +75,13 @@ spring:
 #mybaties配置
 mybatis:
   mapper-locations: classpath:mapper/*.xml,classpath:mapper/*/*.xml
-  type-aliases-package: com.geekcattle.model
+  type-aliases-package: com.saiyun.model
 
 #mapper配置
 mapper:
   plugin : tk.mybatis.mapper.generator.MapperPlugin
   not-empty: false
-  mappers : com.geekcattle.core.CustomerMapper
+  mappers : com.saiyun.core.CustomerMapper
 
 #pagehelper
 pagehelper:
@@ -140,9 +140,9 @@ upload:
     ##文件上传方式可以参数 local    qiniu   oss 本例以七牛为例
     up-type : "local"
     ##文件访问地址  本地上传资源访问地址
-    up-cdn : "http://localhost"
+    up-cdn : "http://localhost:8000/static/img"
     ##本地上传路径
-    hard-disk : "e:/phpProjects/DemoProject/"
+    hard-disk : "E:/img/qrcard/"
 
 # 阿里云OSS上传配置
 aliyun:
@@ -182,7 +182,7 @@ ueditor:
 spring:
   profiles: dev
   datasource:
-      name : geekcattle
+      name : saiyun
       username  : root
       password  : root
       url : jdbc:mysql://localhost:3306/geekcattle?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
@@ -202,8 +202,8 @@ server:
 spring:
   profiles: pro
   datasource:
-      name : geekcattle
-      username  : geekcattle
+      name : saiyun
+      username  : saiyun
       password  : GeekCattle
       url : jdbc:mysql://localhost:3306/geekcattle?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
   redis:

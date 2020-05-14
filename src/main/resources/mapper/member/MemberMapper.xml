@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.geekcattle.mapper.member.MemberMapper">
-  <resultMap id="BaseResultMap" type="com.geekcattle.model.member.Member">
+<mapper namespace="com.saiyun.mapper.member.MemberMapper">
+  <resultMap id="BaseResultMap" type="com.saiyun.model.member.Member">
       <id column="uid" jdbcType="VARCHAR" property="uid" />
       <result column="account" jdbcType="VARCHAR" property="account" />
       <result column="password" jdbcType="VARCHAR" property="password" />

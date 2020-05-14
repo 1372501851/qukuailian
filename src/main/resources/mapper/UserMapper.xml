@@ -1,5 +1,202 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.geekcattle.mapper.member.MemberMapper">
+<mapper namespace="com.saiyun.mapper.UserMapper" >
+  <resultMap id="BaseResultMap" type="com.saiyun.model.User" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="user_id" property="userId"  />
+    <result column="nickname" property="nickname"  />
+    <result column="phone" property="phone"  />
+    <result column="icon_url" property="iconUrl"  />
+    <result column="qr_code_url" property="qrCodeUrl"  />
+    <result column="password" property="password"  />
+    <result column="one_auth"  property="oneAuth" />
+    <result column="two_auth"  property="twoAuth" />
+    <result column="createdate"  property="createdate" />
+    <result column="token"  property="token" />
+  </resultMap>
 
+
+  <sql id="Base_Column_List">
+    user_id, nickname, phone, icon_url, qr_code_url, password,one_auth, two_auth, createdate,token
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from user
+    where user_id = #{userId}
+  </select>
+  <select id="selectOneByUser" parameterType="com.saiyun.model.User" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from user
+    <where>
+      <if test="userId != null and userId != '' ">
+        and user_id = #{userId}
+      </if>
+      <if test="nickname != null and nickname != '' ">
+        and nickname = #{nickname}
+      </if>
+      <if test="phone != null and phone != '' ">
+        and phone = #{phone}
+      </if>
+      <if test="iconUrl != null and iconUrl != '' ">
+        and icon_url = #{iconUrl}
+      </if>
+      <if test="qrCodeUrl != null and qrCodeUrl !='' ">
+        and qr_code_url = #{qrCodeUrl}
+      </if>
+      <if test="password != null and password != '' ">
+        and password = #{password}
+      </if>
+      <if test="oneAuth != null and oneAuth != '' ">
+        and one_auth = #{oneAuth}
+      </if>
+      <if test="twoAuth != null and twoAuth != '' ">
+        and two_auth = #{twoAuth}
+      </if>
+      <if test="createdate != null and createdate != '' ">
+        and createdate = #{createdate}
+      </if>
+      <if test="token != null and token != '' ">
+        and token = #{token}
+      </if>
+    </where>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from user
+    where user_id = #{userId}
+  </delete>
+  <insert id="insert" parameterType="com.saiyun.model.User">
+    insert into user (user_id, nickname, phone,
+      icon_url, qr_code_url,
+      password,one_auth,two_auth,createdate,token)
+    values (#{userId}, #{nickname}, #{phone},
+      #{iconUrl}, #{qrCodeUrl},
+      #{password},#{oneAuth},#{twoAuth},#{createdate},#{token})
+  </insert>
+  <insert id="insertSelective" parameterType="com.saiyun.model.User">
+    insert into user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null and userId != ''">
+        user_id,
+      </if>
+      <if test="nickname != null and nickname != '' ">
+        nickname,
+      </if>
+      <if test="phone != null and phone != '' ">
+        phone,
+      </if>
+      <if test="iconUrl != null and iconUrl != '' ">
+        icon_url,
+      </if>
+      <if test="qrCodeUrl != null and qrCodeUrl != '' ">
+        qr_code_url,
+      </if>
+
+      <if test="password != null and password != '' ">
+        password,
+      </if>
+      <if test="oneAuth != null and oneAuth != '' ">
+        one_auth,
+      </if>
+      <if test="twoAuth != null and twoAuth != '' ">
+        two_auth,
+      </if>
+      <if test="createdate != null and createdate != '' ">
+        createdate,
+      </if>
+      <if test="token != null and token != '' ">
+        token,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null and userId != ''">
+        #{userId},
+      </if>
+      <if test="nickname != null and nickname != '' ">
+        #{nickname},
+      </if>
+      <if test="phone != null and phone != '' ">
+        #{phone},
+      </if>
+      <if test="iconUrl != null and iconUrl != '' ">
+        #{iconUrl},
+      </if>
+      <if test="qrCodeUrl != null and qrCodeUrl != '' ">
+        #{qrCodeUrl},
+      </if>
+
+      <if test="password != null and password != '' ">
+        #{password},
+      </if>
+      <if test="oneAuth != null and oneAuth != '' ">
+        #{oneAuth},
+      </if>
+      <if test="twoAuth != null and twoAuth != '' ">
+        #{twoAuth},
+      </if>
+      <if test="createdate != null and createdate != '' ">
+        #{createdate},
+      </if>
+      <if test="token != null and token != '' ">
+        #{token},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.saiyun.model.User">
+    update user
+    <set>
+      <if test="nickname != null and nickname != '' ">
+        nickname = #{nickname},
+      </if>
+      <if test="phone != null and phone != '' ">
+        phone = #{phone},
+      </if>
+      <if test="iconUrl != null and iconUrl != '' ">
+        icon_url = #{iconUrl},
+      </if>
+      <if test="qrCodeUrl != null and qrCodeUrl != '' ">
+        qr_code_url = #{qrCodeUrl},
+      </if>
+
+      <if test="password != null and password != '' ">
+        password = #{password},
+      </if>
+      <if test="oneAuth != null and oneAuth != '' ">
+        one_auth = #{oneAuth},
+      </if>
+      <if test="twoAuth != null and twoAuth != '' ">
+        two_auth = #{twoAuth},
+      </if>
+      <if test="createdate != null and createdate != '' ">
+        createdate = #{createdate},
+      </if>
+      <if test="token != null and token != '' ">
+        token = #{token},
+      </if>
+    </set>
+    where user_id = #{userId}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="com.saiyun.model.User">
+    update user
+    set nickname = #{nickname},
+      phone = #{phone},
+      icon_url = #{iconUrl},
+      qr_code_url = #{qrCodeUrl},
+      password = #{password},
+      one_auth = #{oneAuth},
+      two_auth = #{two_auth},
+      createdate = #{createdate},
+      token = #{token}
+    where user_id = #{userId}
+  </update>
+  <update id="updateTokenNull" parameterType="java.lang.String">
+    update user
+    set nickname = ''
+    where token = #{token}
+  </update>
 </mapper>
+

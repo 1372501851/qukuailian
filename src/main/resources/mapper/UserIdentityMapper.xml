@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.saiyun.mapper.UserIdentityMapper">
+  <resultMap id="BaseResultMap" type="com.saiyun.model.UserIdentity">
+    <id column="user_identity_id"  property="userIdentityId" />
+    <result column="userid"  property="userid" />
+    <result column="nationality"  property="nationality" />
+    <result column="realname"  property="realname" />
+    <result column="certificate_type"  property="certificateType" />
+    <result column="certificate_number"  property="certificateNumber" />
+    <result column="certificate_front_url"  property="certificateFrontUrl" />
+    <result column="certificate_back_url"  property="certificateBackUrl" />
+    <result column="one_createdate"  property="oneCreatedate" />
+    <result column="one_updatedate"  property="oneUpdatedate" />
+    <result column="two_createdate"  property="twoCreatedate" />
+    <result column="two_updatedate"  property="twoUpdatedate" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    user_identity_id, userid, nationality, realname, certificate_type, certificate_number, 
+    certificate_front_url, certificate_back_url, one_createdate, one_updatedate, two_createdate, 
+    two_updatedate
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from user_identity
+    where user_identity_id = #{userIdentityId}
+  </select>
+  <select id="selectOneByUser" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from user_identity
+    where userid = #{userid}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from user_identity
+    where user_identity_id = #{userIdentityId}
+  </delete>
+  <insert id="insert" parameterType="com.saiyun.model.UserIdentity">
+    insert into user_identity (user_identity_id, userid, nationality, 
+      realname, certificate_type, certificate_number, 
+      certificate_front_url, certificate_back_url, 
+      one_createdate, one_updatedate, two_createdate, 
+      two_updatedate)
+    values (#{userIdentityId}, #{userid}, #{nationality}, 
+      #{realname}, #{certificateType}, #{certificateNumber}, 
+      #{certificateFrontUrl}, #{certificateBackUrl}, 
+      #{oneCreatedate}, #{oneUpdatedate}, #{twoCreatedate}, 
+      #{twoUpdatedate})
+  </insert>
+  <insert id="insertSelective" parameterType="com.saiyun.model.UserIdentity">
+    insert into user_identity
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userIdentityId != null">
+        user_identity_id,
+      </if>
+      <if test="userid != null">
+        userid,
+      </if>
+      <if test="nationality != null">
+        nationality,
+      </if>
+      <if test="realname != null">
+        realname,
+      </if>
+      <if test="certificateType != null">
+        certificate_type,
+      </if>
+      <if test="certificateNumber != null">
+        certificate_number,
+      </if>
+      <if test="certificateFrontUrl != null">
+        certificate_front_url,
+      </if>
+      <if test="certificateBackUrl != null">
+        certificate_back_url,
+      </if>
+      <if test="oneCreatedate != null">
+        one_createdate,
+      </if>
+      <if test="oneUpdatedate != null">
+        one_updatedate,
+      </if>
+      <if test="twoCreatedate != null">
+        two_createdate,
+      </if>
+      <if test="twoUpdatedate != null">
+        two_updatedate,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userIdentityId != null">
+        #{userIdentityId},
+      </if>
+      <if test="userid != null">
+        #{userid},
+      </if>
+      <if test="nationality != null">
+        #{nationality},
+      </if>
+      <if test="realname != null">
+        #{realname},
+      </if>
+      <if test="certificateType != null">
+        #{certificateType},
+      </if>
+      <if test="certificateNumber != null">
+        #{certificateNumber},
+      </if>
+      <if test="certificateFrontUrl != null">
+        #{certificateFrontUrl},
+      </if>
+      <if test="certificateBackUrl != null">
+        #{certificateBackUrl},
+      </if>
+      <if test="oneCreatedate != null">
+        #{oneCreatedate},
+      </if>
+      <if test="oneUpdatedate != null">
+        #{oneUpdatedate},
+      </if>
+      <if test="twoCreatedate != null">
+        #{twoCreatedate},
+      </if>
+      <if test="twoUpdatedate != null">
+        #{twoUpdatedate},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.saiyun.model.UserIdentity">
+    update user_identity
+    <set>
+      <if test="userid != null">
+        userid = #{userid},
+      </if>
+      <if test="nationality != null">
+        nationality = #{nationality},
+      </if>
+      <if test="realname != null">
+        realname = #{realname},
+      </if>
+      <if test="certificateType != null">
+        certificate_type = #{certificateType},
+      </if>
+      <if test="certificateNumber != null">
+        certificate_number = #{certificateNumber},
+      </if>
+      <if test="certificateFrontUrl != null">
+        certificate_front_url = #{certificateFrontUrl},
+      </if>
+      <if test="certificateBackUrl != null">
+        certificate_back_url = #{certificateBackUrl},
+      </if>
+      <if test="oneCreatedate != null">
+        one_createdate = #{oneCreatedate},
+      </if>
+      <if test="oneUpdatedate != null">
+        one_updatedate = #{oneUpdatedate},
+      </if>
+      <if test="twoCreatedate != null">
+        two_createdate = #{twoCreatedate},
+      </if>
+      <if test="twoUpdatedate != null">
+        two_updatedate = #{twoUpdatedate},
+      </if>
+    </set>
+    where user_identity_id = #{userIdentityId}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.saiyun.model.UserIdentity">
+    update user_identity
+    set userid = #{userid},
+      nationality = #{nationality},
+      realname = #{realname},
+      certificate_type = #{certificateType},
+      certificate_number = #{certificateNumber},
+      certificate_front_url = #{certificateFrontUrl},
+      certificate_back_url = #{certificateBackUrl},
+      one_createdate = #{oneCreatedate},
+      one_updatedate = #{oneUpdatedate},
+      two_createdate = #{twoCreatedate},
+      two_updatedate = #{twoUpdatedate}
+    where user_identity_id = #{userIdentityId}
+  </update>
+</mapper>

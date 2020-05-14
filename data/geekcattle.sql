@@ -1,10 +1,10 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : geekcattle
+Source Server         : saiyun
 Source Server Version : 50552
 Source Host           : 121.41.17.147:3306
-Source Database       : geekcattle
+Source Database       : saiyun
 
 Target Server Type    : MYSQL
 Target Server Version : 50552
