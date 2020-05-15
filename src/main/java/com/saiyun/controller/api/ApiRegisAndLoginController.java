@@ -4,19 +4,13 @@ import com.saiyun.exception.SMSFailException;
 import com.saiyun.model.User;
 import com.saiyun.service.RegisAndLoginService;
 import com.saiyun.service.UserService;
-import com.saiyun.util.CommonUtils;
-import com.saiyun.util.ReturnUtil;
-import com.saiyun.util.StringCheckUtil;
-import com.saiyun.util.TokenUtil;
+import com.saiyun.util.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
@@ -31,8 +25,6 @@ public class ApiRegisAndLoginController {
 
     /**
      * 注册
-     * @param phone
-     * @return
      */
     @RequestMapping(value = "regis",method = RequestMethod.POST)
     public ModelMap regis(@RequestBody TreeMap<String,String> map){
@@ -42,6 +34,9 @@ public class ApiRegisAndLoginController {
             String password = map.get("password");
             if (StringCheckUtil.isEmpty(phone,password,code)){
                 return ReturnUtil.error("请填写完整信息");
+            }
+            if(!ValidataUtil.checkPwd(password)){
+                return ReturnUtil.error("请输入6-20位的密码");
             }
             //是否已注册
             if(regisAndLoginService.exist(phone)){
@@ -90,7 +85,7 @@ public class ApiRegisAndLoginController {
             }else if("2".equals(scene)){
                 String password = map.get("password");
                 if(password == null || user == null || !CommonUtils.calculateMD5(password).equals(user.getPassword())){
-                    return  ReturnUtil.error("密码不正确");
+                    return  ReturnUtil.error("用户名或者密码不正确");
                 }
             }else{
                 return ReturnUtil.error("信息不全");
@@ -103,9 +98,24 @@ public class ApiRegisAndLoginController {
         }
     }
 
+    @PostMapping(value = "checkPhoneExit")
+    public ModelMap checkPhoneExit(@RequestBody TreeMap<String, String> map){
+        try{
+            String phone = map.get("phone");
+            boolean exist = regisAndLoginService.exist(phone);
+            if (exist){
+                return ReturnUtil.error("该手机号已存在");
+            }else{
+                return ReturnUtil.success("该手机号不存在");
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            return ReturnUtil.error("后台错误，请联系管理员");
+        }
+    }
+
     /**
      * 短信验证码发送
-
      */
     @RequestMapping(value = "getverificationcode",method = RequestMethod.POST)
     public ModelMap sendMessage(@RequestBody TreeMap<String, String> map){
@@ -115,6 +125,9 @@ public class ApiRegisAndLoginController {
             String phone = map.get("phone");
             if(StringCheckUtil.isEmpty(phone,scene)){
                 return ReturnUtil.error("请填写完整信息");
+            }
+            if(!ValidataUtil.isMobile(phone)){
+                return ReturnUtil.error("请输入正确的手机号");
             }
             //60s内只能发送一次
             if(regisAndLoginService.phoneExtis(phone,scene)){

@@ -24,6 +24,10 @@ management:
       show-details: always
 
 spring:
+  # i88n国际化
+  messages:
+    basename: i18n/messages
+    encoding: UTF-8
   application:
     name: geek-framework
   profiles:
@@ -179,6 +183,7 @@ ueditor:
 ---
 
 #开发环境
+
 spring:
   profiles: dev
   datasource:

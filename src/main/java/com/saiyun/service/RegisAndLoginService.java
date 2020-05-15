@@ -22,7 +22,9 @@ public class RegisAndLoginService {
     @Value("${upload.config.hard-disk}")
     private String docBase;
     //短信验证码销毁时间
-    Integer codeExpirationTime = 60;
+    Integer codeExpirationTime = 60*15;//15分钟
+    //同个号码发送短信间隔
+    Integer phoneSnedInterval = 60;//60s
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
     @Autowired
@@ -68,7 +70,8 @@ public class RegisAndLoginService {
      * @param scene 1,注册 2，登录
      */
     public void  sendMessage(String phone,String scene) throws SMSFailException {
-        String code = "";
+        String code =ValidataUtil.getRandomSix();
+        System.out.println(code);
         //短信发送
         if(false){
             System.out.println("发送短信成功");
@@ -76,17 +79,18 @@ public class RegisAndLoginService {
             throw new SMSFailException("短信发送失败");
         }
         //存进redis
-        redisTemplate.opsForValue().set(phone+":"+scene, code, codeExpirationTime, TimeUnit.SECONDS);
+        redisTemplate.opsForValue().set(phone+":"+scene, code, codeExpirationTime, TimeUnit.SECONDS);//短信
+        redisTemplate.opsForValue().set(phone+":"+scene+":interval",phone,phoneSnedInterval, TimeUnit.SECONDS);
     }
 
     /**
-     * 短信是否存在
+     * 是否过了短信发送间隔
      * @param phone 电话号码
-     * @param scene 1,注册 2，登录
-     * @return true 存在
+     * @param scene
+     * @return
      */
     public boolean phoneExtis(String phone,String scene){
-        if(redisTemplate.opsForValue().get(phone+":"+scene)==null){
+        if(redisTemplate.opsForValue().get(phone+":"+scene+":interval")==null){
             return true;
         }else {
             return false;

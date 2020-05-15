@@ -187,6 +187,9 @@ public class ValidataUtil {
      * @return
      */
     public static boolean isMobile(String mobile) {
+        if (StringUtils.isEmpty(mobile)){
+            return false;
+        }
         String regex = "^1\\d{10}$";
         if (mobile.length() != 11) {
             return false;
@@ -360,6 +363,21 @@ public class ValidataUtil {
         }else
             return true;
     }
+    /**
+     * 密码验证
+     * @param pwd
+     * @return
+     */
+    public static boolean checkPwd(String pwd) {
+        String regExp = "^[\\w_]{6,20}$";
+        if(StringUtils.isEmpty(pwd)){
+            return false;
+        }
+        if(pwd.matches(regExp)) {
+            return true;
+        }
+        return false;
+    }
 
     public static void main(String[] args) {
         String address="255fzsEBHy9Ri2bMQ8uuuR3tv1YzcDywd4";
@@ -369,5 +387,13 @@ public class ValidataUtil {
         }else{
             System.out.println("true");
         }
+    }
+    /*
+    生成6位随机验证码
+     */
+    public static String getRandomSix(){
+        String verifyCode = String
+                .valueOf(new Random().nextInt(899999) + 100000);//生成短信验证码
+        return verifyCode;
     }
 }

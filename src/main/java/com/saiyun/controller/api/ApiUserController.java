@@ -35,14 +35,17 @@ public class ApiUserController {
     @RequestMapping(value = "changePassword",method = RequestMethod.POST)
     public ModelMap changePassword(@RequestBody TreeMap<String, Object> map){
         try{
-            String token = map.get("token").toString();
-            String code = map.get("code").toString();
-            String password = map.get("password").toString();
+            String token = (String) map.get("token");
+            String code = (String) map.get("code");
+            String password = (String) map.get("password");
             User user = userService.getUserByToken(token);
             String changePasswordScene = "3";
             String cacheCode = regisAndLoginService.getCacheCode(user.getPhone(), changePasswordScene);
             if(cacheCode == null || !cacheCode.equals(code)){
                 return ReturnUtil.error("验证码不正确");
+            }
+            if (!ValidataUtil.checkPwd(password)){
+                return ReturnUtil.error("请输入6-20位的密码");
             }
             if(StringUtils.isEmpty(password)){
                 return ReturnUtil.error("请输入密码");
@@ -64,9 +67,9 @@ public class ApiUserController {
     @RequestMapping(value = "retrievePassword",method = RequestMethod.POST)
     public ModelMap retrievePassword(@RequestBody TreeMap<String,Object> map){
         try{
-            String phone = map.get("phone").toString();
-            String code = map.get("code").toString();
-            String password = map.get("password").toString();
+            String phone = (String) map.get("phone");
+            String code = (String) map.get("code");
+            String password = (String) map.get("password");
             String retrievePasswordScene = "4";
             String cacheCode = regisAndLoginService.getCacheCode(phone, retrievePasswordScene);
 

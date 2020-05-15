@@ -106,10 +106,6 @@ public class HomeService {
         return map;
     }
 
-    public ModelMap userSell(TreeMap<String, String> map, User user) {
-        return null;
-    }
-
     /**
      *
      * @param bType 货币类型 1，btc 2,usdt
@@ -120,18 +116,32 @@ public class HomeService {
      * @return
      */
     public Map countNum(String bType, String cType, String sType, String sum, BPriceVo bprice) {
-
-
-
         HashMap<String, String> map = new HashMap<>();
         //返回金额，单价，数量
+        BigDecimal unitPrice = null;
         BigDecimal sumDecimal = new BigDecimal(sum);
-        if("1".equals(sType)){ //按价格出售
-            if("1".equals(cType)){//人民币
-                
+        if("1".equals(bType)){//btc
+            unitPrice = bprice.getBtcCny();
+            if("2".equals(cType)){//欧元
+                unitPrice = bprice.getBtcEur();
             }
-
+        }else if("2".equals(bType)){//usdt
+            unitPrice = bprice.getUsdtCny();
+            if("2".equals(cType)){//欧元
+                unitPrice = bprice.getUsdtEur();
+            }
         }
+        map.put("unitPrice",unitPrice.toString());
+        if("1".equals(sType)){//sum是金额,计算可购买数量
+            BigDecimal bSum = sumDecimal.divide(unitPrice, 6, RoundingMode.HALF_DOWN);
+            map.put("bSum",bSum.toString());
+            map.put("money",sum);
+        }else if("2".equals(sType)){//sum是数量，计算金额
+            BigDecimal money = sumDecimal.multiply(unitPrice);
+            map.put("bSum",sum);
+            map.put("money",money.toString());
+        }
+        return map;
     }
 
 }

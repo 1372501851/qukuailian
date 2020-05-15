@@ -2,12 +2,14 @@
 import com.saiyun.model.Params;
 import com.saiyun.model.vo.BPriceVo;
 import com.saiyun.util.*;
+import org.apache.http.HttpResponse;
 import org.junit.Test;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * author saiyun
@@ -124,6 +126,73 @@ public class TestUtil{
 //        BigDecimal sum = new BigDecimal("200.00");
 //        BigDecimal divide = sum.divide(bPriceVo.getBtcCny(), 6, RoundingMode.HALF_DOWN);
 //        System.out.println(divide);
+    }
+    public static void main(String[] args) {
+        String host = "https://cxwg.market.alicloudapi.com";
+        String path = "/sendSms";
+        String method = "POST";
+        String appcode = "eb3f8b880b184344acec096575c143a6";
+        Map<String, String> headers = new HashMap<String, String>();
+        //最后在header中的格式(中间是英文空格)为Authorization:APPCODE 83359fd73fe94948385f570e3c139105
+        headers.put("Authorization", "APPCODE " + appcode);
+        Map<String, String> querys = new HashMap<String, String>();
+        //测试可用默认短信模板,测试模板为专用模板不可修改,如需自定义短信内容或改动任意字符,请联系旺旺或QQ726980650进行申请
+        querys.put("content", "【创信】你的验证码是：5873，3分钟内有效！");
+        querys.put("mobile", "15692827516");
+        Map<String, String> bodys = new HashMap<String, String>();
+
+
+        try {
+            /**
+             * 重要提示如下:
+             * HttpUtils请从
+             * https://github.com/aliyun/api-gateway-demo-sign-java/blob/master/src/main/java/com/aliyun/api/gateway/demo/util/HttpUtils.java
+             * 下载
+             *
+             * 相应的依赖请参照
+             * https://github.com/aliyun/api-gateway-demo-sign-java/blob/master/pom.xml
+             */
+            HttpResponse response = HttpUtils.doPost(host, path, method, headers, querys, bodys);
+            System.out.println(response.toString());
+            //获取response的body
+            //System.out.println(EntityUtils.toString(response.getEntity()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    @Test
+    public void test(){
+        String s1 = null;
+        String s2 = "551145d4a534ds5ds2d1s2ds2ds2221s";
+        String s3 = "lkflds5555";
+        if (ValidataUtil.checkPwd(s1)){
+            System.out.println("进入s1");
+        }
+        if(ValidataUtil.checkPwd(s2)){
+            System.out.println("进入s2");
+        }
+        if (ValidataUtil.checkPwd(s3)){
+            System.out.println("进入s3");
+        }
+    }
+    public static String getCode1() {
+
+        Integer intFlag = (int) (Math.random() * 1000000);
+
+        String flag = intFlag.toString();
+
+        if (flag.length() == 6 && flag.startsWith("9")) {
+            return intFlag.toString();
+        } else {
+            intFlag = intFlag + 100000;
+            return intFlag.toString();
+        }
+
+
+    }
+
+    public static String getCode2() {
+        return String.valueOf((int) ((Math.random() * 9 + 1) * 100000));
     }
 
 

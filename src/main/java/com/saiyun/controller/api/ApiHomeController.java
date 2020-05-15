@@ -5,9 +5,7 @@ import com.saiyun.model.User;
 import com.saiyun.model.UserWallet;
 import com.saiyun.model.vo.BPriceVo;
 import com.saiyun.model.vo.HomeVo;
-import com.saiyun.service.HomeService;
-import com.saiyun.service.ParamsService;
-import com.saiyun.service.UserService;
+import com.saiyun.service.*;
 import com.saiyun.util.ReturnUtil;
 import com.saiyun.util.StringCheckUtil;
 import net.bytebuddy.asm.Advice;
@@ -30,6 +28,10 @@ public class ApiHomeController {
     private HomeService homeService;
     @Autowired
     private ParamsService paramsService;
+    @Autowired
+    private UserWalletService userWalletService;
+    @Autowired
+    private ProductService productService;
 
     /**
      * 首页数据
@@ -69,7 +71,12 @@ public class ApiHomeController {
         }
     }
 
-    @RequestMapping
+    /**
+     * 我要卖用户输入计算总价和数量
+     * @param map
+     * @return
+     */
+    @RequestMapping("countNum")
 //    @TokenRequired
     public ModelMap countNum(@RequestBody TreeMap<String,String> map){
         try{
@@ -84,7 +91,7 @@ public class ApiHomeController {
                 return ReturnUtil.error("参数不全");
             }
             Map returnMap = homeService.countNum(bType,cType,sType,sum,bprice);
-            return null;
+            return ReturnUtil.success("",returnMap);
         }catch (Exception e){
             e.printStackTrace();
             return ReturnUtil.error("后台错误，请联系管理员");
@@ -101,10 +108,25 @@ public class ApiHomeController {
         try{
             String token = map.get("token");
             User user = userService.getUserByToken(token);
-            return  homeService.userSell(map,user);
+            String sum = (String)map.get("sum");//币数量
+            String bType = (String)map.get("bType");//货币类型 1，btc 2,usdt
+            if(StringCheckUtil.isEmpty(sum,bType)){
+                return ReturnUtil.error("参数不全");
+            }
+            boolean enough = userWalletService.enough(sum, bType, user);//判断货币是否足够
+            if(!enough){
+                return ReturnUtil.error("货币不足");
+            }
+            boolean flag = productService.addProduct(user,sum,bType);
+            if(flag){
+                return ReturnUtil.success("上架成功");
+            }else {
+                return ReturnUtil.error("上架失败");
+            }
         }catch (Exception e){
             e.printStackTrace();
             return ReturnUtil.error("后台错误，请联系管理员");
         }
     }
+
 }

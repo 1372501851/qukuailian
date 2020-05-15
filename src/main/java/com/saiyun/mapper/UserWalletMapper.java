@@ -1,6 +1,7 @@
 package com.saiyun.mapper;
 
 import com.saiyun.model.UserWallet;
+import org.springframework.stereotype.Service;
 
 public interface UserWalletMapper {
     int deleteByPrimaryKey(Long userWalletId);
