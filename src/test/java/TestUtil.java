@@ -194,6 +194,16 @@ public class TestUtil{
     public static String getCode2() {
         return String.valueOf((int) ((Math.random() * 9 + 1) * 100000));
     }
+    @Test
+    public void  test088(){
+        BigDecimal bg = new BigDecimal("1E11");
+        BigDecimal dd = new BigDecimal("7.0012");
+        BigDecimal mm = dd.multiply(new BigDecimal("0.00000000"));
+        BigDecimal kk = bg.multiply(dd);
+        System.out.println(kk.toPlainString());
+        System.out.println(mm.toPlainString());
+        System.out.println(dd);
+    }
 
 
 

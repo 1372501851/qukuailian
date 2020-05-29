@@ -1,145 +1,185 @@
+/**
+ * 
+ */
 package com.saiyun.model;
 
+import lombok.Data;
+
 import java.math.BigDecimal;
+import java.util.Date;
 
+/**
+ * @author Admin 用户钱包
+ */
+@Data
 public class UserWallet {
-    private String userWalletId;
 
-    private String userId;
+	private Integer walletState;
 
-    private String address;
+	private String id;
 
-    private String state;
+	private String userId;
 
-    private String String;
+	private String address;
 
-    private BigDecimal btcBalance;
+	private String date;
 
-    private BigDecimal btcUnbalance;
+	private Integer type;
 
-    private String flag;
+	private Integer state;
 
-    private BigDecimal recountbalance;
+	private BigDecimal balance;
 
-    private BigDecimal balanceBackup;
+	private BigDecimal unbalance;
+	// 总资产
+	private BigDecimal totalBalance;
 
-    private String payStatus;
+	// 行情
+	private BigDecimal moneyRate;
+	// 币名
+	private String coinName;
+	// 币所属类
+	private Integer coinType;
+	private String flag;
+	private String coinImg;
 
-    private String walletState;
+	public String getId() {
+		return id;
+	}
 
-    private BigDecimal usdtBalance;
+	public void setId(String id) {
+		this.id = id;
+	}
 
-    private BigDecimal usdtUnbalance;
+	public String getUserId() {
+		return userId;
+	}
 
-    public String getUserWalletId() {
-        return userWalletId;
-    }
+	public String getFlag() {
+		return flag;
+	}
 
-    public void setUserWalletId(String userWalletId) {
-        this.userWalletId = userWalletId;
-    }
+	public void setFlag(String flag) {
+		this.flag = flag;
+	}
 
-    public String getUserId() {
-        return userId;
-    }
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
 
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
+	public String getAddress() {
+		return address;
+	}
 
-    public String getAddress() {
-        return address;
-    }
+	public void setAddress(String address) {
+		this.address = address;
+	}
 
-    public void setAddress(String address) {
-        this.address = address == null ? null : address.trim();
-    }
+	public String getDate() {
+		return date;
+	}
 
-    public String getState() {
-        return state;
-    }
+	public void setDate(String date) {
+		this.date = date;
+	}
 
-    public void setState(String state) {
-        this.state = state;
-    }
+	public Integer getType() {
+		return type;
+	}
 
-    public String getString() {
-        return String;
-    }
+	public void setType(Integer type) {
+		this.type = type;
+	}
 
-    public void setString(String String) {
-        this.String = String;
-    }
+	public Integer getState() {
+		return state;
+	}
 
-    public BigDecimal getBtcBalance() {
-        return btcBalance;
-    }
+	public void setState(Integer state) {
+		this.state = state;
+	}
 
-    public void setBtcBalance(BigDecimal btcBalance) {
-        this.btcBalance = btcBalance;
-    }
+	public BigDecimal getBalance() {
+		return balance;
+	}
 
-    public BigDecimal getBtcUnbalance() {
-        return btcUnbalance;
-    }
+	public void setBalance(BigDecimal balance) {
+		this.balance = balance;
+	}
 
-    public void setBtcUnbalance(BigDecimal btcUnbalance) {
-        this.btcUnbalance = btcUnbalance;
-    }
+	public void setMoneyRate(BigDecimal moneyRate) {
+		this.moneyRate = moneyRate;
+	}
 
-    public String getFlag() {
-        return flag;
-    }
+	public BigDecimal getMoneyRate() {
+		return moneyRate;
+	}
 
-    public void setFlag(String flag) {
-        this.flag = flag == null ? null : flag.trim();
-    }
+	public String getCoinName() {
+		return coinName;
+	}
 
-    public BigDecimal getRecountbalance() {
-        return recountbalance;
-    }
+	public void setCoinName(String coinName) {
+		this.coinName = coinName;
+	}
 
-    public void setRecountbalance(BigDecimal recountbalance) {
-        this.recountbalance = recountbalance;
-    }
+	public BigDecimal getUnbalance() {
+		return unbalance;
+	}
 
-    public BigDecimal getBalanceBackup() {
-        return balanceBackup;
-    }
+	public Integer getCoinType() {
+		return coinType;
+	}
 
-    public void setBalanceBackup(BigDecimal balanceBackup) {
-        this.balanceBackup = balanceBackup;
-    }
+	public void setCoinType(Integer coinType) {
+		this.coinType = coinType;
+	}
 
-    public String getPayStatus() {
-        return payStatus;
-    }
+	public String getCoinImg() {
+		return coinImg;
+	}
 
-    public void setPayStatus(String payStatus) {
-        this.payStatus = payStatus;
-    }
+	public void setCoinImg(String coinImg) {
+		this.coinImg = coinImg;
+	}
 
-    public String getWalletState() {
-        return walletState;
-    }
+	public void setUnbalance(BigDecimal unbalance) {
+		this.unbalance = unbalance;
+	}
 
-    public void setWalletState(String walletState) {
-        this.walletState = walletState;
-    }
+	public BigDecimal getTotalBalance() {
+		return totalBalance;
+	}
 
-    public BigDecimal getUsdtBalance() {
-        return usdtBalance;
-    }
+	public void setTotalBalance(BigDecimal totalBalance) {
+		this.totalBalance = totalBalance;
+	}
 
-    public void setUsdtBalance(BigDecimal usdtBalance) {
-        this.usdtBalance = usdtBalance;
-    }
+	@Override
+	public String toString() {
+		return "UserWallet{" + "id=" + id + ", userId=" + userId
+				+ ", address='" + address + '\'' + ", date=" + date + ", type="
+				+ type + ", state=" + state + ", balance=" + balance
+				+ ", unbalance=" + unbalance + ", moneyRate=" + moneyRate
+				+ ", coinName='" + coinName + '\'' + '}';
+	}
 
-    public BigDecimal getUsdtUnbalance() {
-        return usdtUnbalance;
-    }
-
-    public void setUsdtUnbalance(BigDecimal usdtUnbalance) {
-        this.usdtUnbalance = usdtUnbalance;
-    }
+	public void setValue(UserWallet copyUserWallet) {
+		if (copyUserWallet == null) {
+			return;
+		}
+		this.id = copyUserWallet.id;
+		this.userId = copyUserWallet.userId;
+		this.address = copyUserWallet.address;
+		this.date = copyUserWallet.date;
+		this.type = copyUserWallet.type;
+		this.state = copyUserWallet.state;
+		this.balance = copyUserWallet.balance;
+		this.unbalance = copyUserWallet.unbalance;
+		this.moneyRate = copyUserWallet.moneyRate;
+		this.coinName = copyUserWallet.coinName;
+		this.coinImg = copyUserWallet.coinImg;
+		this.coinType = copyUserWallet.coinType;
+		this.flag = copyUserWallet.flag;
+	}
 }

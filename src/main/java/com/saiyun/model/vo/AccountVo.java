@@ -1,18 +1,27 @@
 package com.saiyun.model.vo;
 
 public class AccountVo {
+    private String accountId;
     private String accountType;
     private String name;
     private String account;
     private String imgUrl;
     private String bankname;
 
-    public String getType() {
+    public String getAccountId() {
+        return accountId;
+    }
+
+    public void setAccountId(String accountId) {
+        this.accountId = accountId;
+    }
+
+    public String getAccountType() {
         return accountType;
     }
 
-    public void setType(String type) {
-        this.accountType = type;
+    public void setAccountType(String accountType) {
+        this.accountType = accountType;
     }
 
     public String getName() {

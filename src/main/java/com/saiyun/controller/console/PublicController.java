@@ -2,9 +2,13 @@ package com.saiyun.controller.console;
 
 import com.saiyun.core.shiro.CustomerAuthenticationToken;
 import com.saiyun.core.utils.ShiroUtil;
+import com.saiyun.model.User;
 import com.saiyun.model.valid.ValidAdmin;
+import com.saiyun.service.UserService;
 import com.saiyun.service.console.LogService;
+import com.saiyun.util.CommonUtils;
 import com.saiyun.util.IpUtil;
+import com.saiyun.util.ReturnUtil;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.session.Session;
@@ -31,6 +35,9 @@ public class PublicController {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
     private LogService logService;
 
     @RequestMapping(value="/login", method=RequestMethod.GET)
@@ -40,7 +47,6 @@ public class PublicController {
         }
         return "console/login";
     }
-
     @RequestMapping(value="/login", method= RequestMethod.POST)
     public String loginPost(@Valid ValidAdmin validAdmin, BindingResult bindingResult, RedirectAttributes redirectAttributes, HttpServletRequest request){
         if(bindingResult.hasErrors()){

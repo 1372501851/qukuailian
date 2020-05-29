@@ -8,6 +8,15 @@ public class BPriceVo {
     private BigDecimal eurCny;//1eur转成cny
     private BigDecimal btcEur;//1btc转成eur
     private BigDecimal usdtEur;//1usdt转成eur
+    private BigDecimal btcUsdt;//btc转成usdt
+
+    public BigDecimal getBtcUsdt() {
+        return btcUsdt;
+    }
+
+    public void setBtcUsdt(BigDecimal btcUsdt) {
+        this.btcUsdt = btcUsdt;
+    }
 
     public BigDecimal getBtcCny() {
         return btcCny;

@@ -10,47 +10,71 @@
     <result column="amount"  property="amount" />
     <result column="state"  property="state" />
     <result column="creatdate"  property="creatdate" />
+    <result column="wechat"  property="wechat" />
+    <result column="alipay"  property="alipay" />
+    <result column="bankcard"  property="bankcard" />
+    <result column="astrict"  property="astrict" />
+    <result column="unit_price"  property="unitPrice" />
   </resultMap>
-  <resultMap id="VoBaseResultMapextends" type="com.saiyun.model.vo.ProductVo">
-    <id column="product_id"  property="productId" />
-    <result column="b_type"  property="bType" />
-    <result column="max_amount"  property="maxAmount" />
-    <result column="min_amount"  property="minAmount" />
-    <result column="amount"  property="amount" />
-    <result column="icon_rl"  property="iconUrl" />
-    <result column="nickname"  property="nickname" />
-    <result column="sales"  property="sales" />
-    <result column="count"  property="count" />
-    <result column="succ_ate"  property="succRate" />
-    <result column="type"  property="accountType" />
-  </resultMap>
-
   <sql id="Base_Column_List">
-    product_id, user_id, b_type, max_amount, min_amount, amount, state, creatdate
+    product_id, user_id, b_type, max_amount, min_amount, amount, state, creatdate, wechat, 
+    alipay, bankcard, astrict, unit_price
   </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from product
     where product_id = #{productId}
   </select>
-  <select id="getProductByType" parameterType="java.lang.String" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from product
-    where b_type = #{bType} and state = #{state}
+  <select id="matchMoney"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />,min(p.unit_price)
+    from product p
+    where p.b_type = #{bType}
+    and #{money} <![CDATA[ >= ]]>  p.min_amount*p.unit_price
+    and #{money} <![CDATA[ <= ]]>  p.max_amount*p.unit_price-0.000001
+    <if test="wechat != null and wechat != '' ">
+      and p.wechat IS NOT NULL
+    </if>
+    <if test="alipay != null and alipay != '' ">
+      and p.alipay IS NOT NULL
+    </if>
+    <if test="bankcard != null and bankcard != '' ">
+      and p.bankcard IS NOT NULL
+    </if>
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+  <select id="matchAmount"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />,min(p.unit_price)
+    from product p
+    where p.b_type = #{bType}
+    and #{amount} <![CDATA[ >= ]]>  p.min_amount
+    and #{amount} <![CDATA[ <= ]]>  p.max_amount
+    <if test="wechat != null and wechat != '' ">
+      and p.wechat IS NOT NULL
+    </if>
+    <if test="alipay != null and alipay != '' ">
+      and p.alipay IS NOT NULL
+    </if>
+    <if test="bankcard != null and bankcard != '' ">
+      and p.bankcard IS NOT NULL
+    </if>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from product
     where product_id = #{productId}
   </delete>
   <insert id="insert" parameterType="com.saiyun.model.Product">
     insert into product (product_id, user_id, b_type, 
       max_amount, min_amount, amount, 
-      state, creatdate)
+      state, creatdate, wechat, 
+      alipay, bankcard, astrict, 
+      unit_price)
     values (#{productId}, #{userId}, #{bType}, 
       #{maxAmount}, #{minAmount}, #{amount}, 
-      #{state}, #{creatdate})
+      #{state}, #{creatdate}, #{wechat}, 
+      #{alipay}, #{bankcard}, #{astrict}, 
+      #{unitPrice})
   </insert>
   <insert id="insertSelective" parameterType="com.saiyun.model.Product">
     insert into product
@@ -79,6 +103,21 @@
       <if test="creatdate != null">
         creatdate,
       </if>
+      <if test="wechat != null">
+        wechat,
+      </if>
+      <if test="alipay != null">
+        alipay,
+      </if>
+      <if test="bankcard != null">
+        bankcard,
+      </if>
+      <if test="astrict != null">
+        astrict,
+      </if>
+      <if test="unitPrice != null">
+        unit_price,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="productId != null">
@@ -104,6 +143,21 @@
       </if>
       <if test="creatdate != null">
         #{creatdate},
+      </if>
+      <if test="wechat != null">
+        #{wechat},
+      </if>
+      <if test="alipay != null">
+        #{alipay},
+      </if>
+      <if test="bankcard != null">
+        #{bankcard},
+      </if>
+      <if test="astrict != null">
+        #{astrict},
+      </if>
+      <if test="unitPrice != null">
+        #{unitPrice},
       </if>
     </trim>
   </insert>
@@ -131,6 +185,21 @@
       <if test="creatdate != null">
         creatdate = #{creatdate},
       </if>
+      <if test="wechat != null">
+        wechat = #{wechat},
+      </if>
+      <if test="alipay != null">
+        alipay = #{alipay},
+      </if>
+      <if test="bankcard != null">
+        bankcard = #{bankcard},
+      </if>
+      <if test="astrict != null">
+        astrict = #{astrict},
+      </if>
+      <if test="unitPrice != null">
+        unit_price = #{unitPrice},
+      </if>
     </set>
     where product_id = #{productId}
   </update>
@@ -142,7 +211,12 @@
       min_amount = #{minAmount},
       amount = #{amount},
       state = #{state},
-      creatdate = #{creatdate}
+      creatdate = #{creatdate},
+      wechat = #{wechat},
+      alipay = #{alipay},
+      bankcard = #{bankcard},
+      astrict = #{astrict},
+      unit_price = #{unitPrice}
     where product_id = #{productId}
   </update>
 </mapper>

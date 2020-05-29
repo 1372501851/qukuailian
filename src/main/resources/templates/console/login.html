@@ -20,7 +20,8 @@
     </div>
     <div class="login-box-body">
         <h3 class="text-center">Geek-Framework</h3>
-        <form action="/console/login" method="post">
+        <form action="/console/login" method="post" id="sendId">
+
             <div class="form-group has-feedback">
                 <input type="text" name="username" class="form-control" placeholder="username" />
                 <span class="glyphicon glyphicon-user form-control-feedback"></span>
@@ -43,6 +44,6 @@
     if(top != window){
         top.location.href = window.location.href;
     }
-</script>
+    </script>
 </body>
 </html>

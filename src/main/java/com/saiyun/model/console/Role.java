@@ -149,7 +149,7 @@ public class Role extends BaseEntity {
                 ", createdAt='" + createdAt + '\'' +
                 ", updatedAt='" + updatedAt + '\'' +
                 ", sort='" + sort + '\'' +
-                ", order='" + order + '\'' +
+                ", Order='" + order + '\'' +
                 ", menuList=" + menuList +
                 ", adminList=" + adminList +
                 '}';

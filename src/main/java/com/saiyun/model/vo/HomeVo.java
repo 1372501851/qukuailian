@@ -1,23 +1,22 @@
 package com.saiyun.model.vo;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 public class HomeVo {
     private String btcValue;
 
     private String cny;
 
-    private String usdtBalance;
+    private List<BVo> bLists;
 
-    private String usdtUnbalance;
+    public List<BVo> getbLists() {
+        return bLists;
+    }
 
-    private String btcBalance;
-
-    private String btcUnbalance;
-
-    private String btcCny;
-
-    private String usdtCny;
+    public void setbLists(List<BVo> bLists) {
+        this.bLists = bLists;
+    }
 
     public String getBtcValue() {
         return btcValue;
@@ -35,51 +34,5 @@ public class HomeVo {
         this.cny = cny;
     }
 
-    public String getUsdtBalance() {
-        return usdtBalance;
-    }
 
-    public void setUsdtBalance(String usdtBalance) {
-        this.usdtBalance = usdtBalance;
-    }
-
-    public String getUsdtUnbalance() {
-        return usdtUnbalance;
-    }
-
-    public void setUsdtUnbalance(String usdtUnbalance) {
-        this.usdtUnbalance = usdtUnbalance;
-    }
-
-    public String getBtcBalance() {
-        return btcBalance;
-    }
-
-    public void setBtcBalance(String btcBalance) {
-        this.btcBalance = btcBalance;
-    }
-
-    public String getBtcUnbalance() {
-        return btcUnbalance;
-    }
-
-    public void setBtcUnbalance(String btcUnbalance) {
-        this.btcUnbalance = btcUnbalance;
-    }
-
-    public String getBtcCny() {
-        return btcCny;
-    }
-
-    public void setBtcCny(String btcCny) {
-        this.btcCny = btcCny;
-    }
-
-    public String getUsdtCny() {
-        return usdtCny;
-    }
-
-    public void setUsdtCny(String usdtCny) {
-        this.usdtCny = usdtCny;
-    }
 }

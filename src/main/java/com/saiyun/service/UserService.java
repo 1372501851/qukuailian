@@ -1,16 +1,20 @@
 package com.saiyun.service;
 
+import com.github.pagehelper.PageHelper;
 import com.saiyun.exception.TokenException;
 import com.saiyun.mapper.ReceptionAccountMapper;
 import com.saiyun.mapper.UserIdentityMapper;
 import com.saiyun.mapper.UserMapper;
+
 import com.saiyun.model.ReceptionAccount;
 import com.saiyun.model.User;
 import com.saiyun.model.UserIdentity;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -53,17 +57,10 @@ public class UserService {
         userMapper.updateByPrimaryKeySelective(user);
     }
 
-    public Map isAuth(String userId) {
-        User user = userMapper.selectByPrimaryKey(userId);
+    public Map isAuth(User user) {
         Map<String, String> map = new HashMap<>();
+        map.put("phone", StringUtils.isEmpty(user.getPhone())?"0":"1");
         map.put("oneAuth",user.getOneAuth());
-        if("0".equals(user.getOneAuth())){
-            UserIdentity userIdentity = userIdentityMapper.selectByUsrId(userId);
-            map.put("name",userIdentity.getRealname());
-            map.put("certificateNumber",userIdentity.getCertificateNumber());
-        }else{
-            return map;
-        }
         map.put("twoAuth",user.getTwoAuth());
         return map;
     }
@@ -83,10 +80,20 @@ public class UserService {
     }
 
     public void addUser(User userByToken) {
-         userMapper.insertSelective(userByToken);
+         userMapper.updateByPrimaryKeySelective(userByToken);
     }
 
     public void addReceptionAccount(ReceptionAccount receptionAccount) {
         receptionAccountMapper.insertSelective(receptionAccount);
+    }
+
+    public List<User> getAll(User user) {
+        PageHelper.offsetPage(user.getOffset(), user.getLimit());
+        List<User> users= userMapper.selectAll();
+        return users;
+    }
+
+    public UserIdentity getUserIdentity(String sellUserId) {
+        return userIdentityMapper.selectOneByUserId(sellUserId);
     }
 }

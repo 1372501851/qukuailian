@@ -1,0 +1,665 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.saiyun.mapper.EntrustMapper">
+    <resultMap id="BaseResultMap" type="com.saiyun.model.Entrust">
+        <id column="entrust_id" property="entrustId"/>
+        <result column="entrust_no" property="entrustNo"/>
+        <result column="user_id" property="userId"/>
+        <result column="money_Type" jdbcType="CHAR" property="moneyType"/>
+        <result column="coin_no" property="coinNo"/>
+        <result column="entrust_type" property="entrustType"/>
+        <result column="entrust_price" property="entrustPrice"/>
+        <result column="day_limit" property="dayLimit"/>
+        <result column="entrust_min_price" property="entrustMinPrice"/>
+        <result column="entrust_max_price" property="entrustMaxPrice"/>
+        <result column="entrust_num" property="entrustNum"/>
+        <result column="remain_num" property="remainNum"/>
+        <result column="deal_num" property="dealNum"/>
+        <result column="match_num" property="matchNum"/>
+        <result column="cancel_num" property="cancelNum"/>
+        <result column="poundage" property="poundage"/>
+        <result column="poundage_scale" property="poundageScale"/>
+        <result column="state" property="state"/>
+        <result column="remark" property="remark"/>
+        <result column="creat_date" property="creatDate"/>
+        <result column="wechat" property="wechat"/>
+        <result column="alipay" property="alipay"/>
+        <result column="bankcard" property="bankcard"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    entrust_id, entrust_no, user_id, money_Type, coin_no, entrust_type, entrust_price, 
+    day_limit, entrust_min_price, entrust_max_price, entrust_num, remain_num, deal_num, 
+    match_num, cancel_num, poundage, poundage_scale, state, remark, creat_date, wechat, 
+    alipay, bankcard
+  </sql>
+    <sql id="myBase_Column_List">
+     te.entrust_id,
+     te.entrust_no,
+     te.user_id,
+     te.money_Type,
+     te.coin_no,
+     te.entrust_type,
+     te.entrust_price,
+     te.day_limit,
+     te.entrust_min_price,
+     te.entrust_max_price,
+     te.entrust_num,
+     te.remain_num,
+     te.deal_num,
+     te.match_num,
+     te.cancel_num,
+     te.poundage,
+     te.poundage_scale,
+     te.state,
+     te.remark,
+     te.creat_date,
+     te.wechat,
+     te.alipay,
+     te.bankcard
+  </sql>
+
+    <select id="selectByMaxPriceLimit" resultMap="BaseResultMap">
+        select
+        entrust_id, entrust_no, user_id, money_Type, coin_no, entrust_type, entrust_price,
+    day_limit, entrust_min_price, if(entrust_max_price <![CDATA[ > ]]> day_limit,day_limit,entrust_max_price)
+    as entrust_max_price, entrust_num, remain_num, deal_num,
+    match_num, cancel_num, poundage, poundage_scale, state, remark, creat_date, wechat,
+    alipay, bankcard
+        from t_entrust
+        where entrust_id = #{entrustId}
+    </select>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_entrust
+        where entrust_id = #{entrustId}
+    </select>
+    <select id="matchMinOrMaxPrice" parameterType="com.saiyun.model.Entrust" resultType="java.math.BigDecimal">
+
+        select
+        <if test="entrustType != null  and entrustType ==1">
+            min(te.entrust_price) as entrust_price
+        </if>
+        <if test="entrustType != null  and entrustType ==0">
+            max(te.entrust_price) as entrust_price
+        </if>
+
+        from t_entrust te
+        <!--剩余数量*单价要大于最小限额-->
+        where te.state = 0
+         and (te.remain_num <![CDATA[ * ]]> te.entrust_price) <![CDATA[ > ]]> te.entrust_min_price
+        <!-- 外部启用了强判断，entrustType必有值 -->
+        and te.entrust_type = #{entrustType}
+        <!--每日限额小于最小交易额度的不显示-->
+        and te.day_limit>te.entrust_min_price
+        <if test="coinNo != null and coinNo != ''">
+            and coin_no = #{coinNo}
+        </if>
+        <!--   是否支持微信，等方式,不为空表示支持 -->
+        <if test="wechat != null and wechat != '' ">
+            and te.wechat = 1
+        </if>
+        <if test="alipay != null and alipay != '' ">
+            and te.alipay = 1
+        </if>
+        <if test="bankcard != null and bankcard != '' ">
+            and te.bankcard = 1
+        </if>
+        <!-- 人民币或者欧元 -->
+        <if test="moneyType != null and moneyType != '' ">
+            and te.money_type = #{moneyType}
+        </if>
+        <!-- 最小限额要比传入金额小,实际最大限额要比传入金额大,
+        传入金额除以单价加上手续费要比剩余数量小
+        -->
+        <if test="moneyCondit != null and moneyCondit != '' ">
+            AND #{moneyCondit} between te.entrust_min_price
+            AND
+            IF (
+            te.entrust_max_price  <![CDATA[ > ]]> te.day_limit,
+            te.day_limit,
+            te.entrust_max_price
+            )
+            AND te.remain_num  <![CDATA[ > ]]> (
+            (
+            #{moneyCondit} <![CDATA[ / ]]> te.entrust_price
+            )  <![CDATA[ + ]]> ((
+            #{moneyCondit} <![CDATA[ / ]]> te.entrust_price)
+            <![CDATA[ * ]]> te.poundage_scale)
+            )
+        </if>
+        <if test="numCondit != null and numCondit != '' ">
+            and (#{numCondit} <![CDATA[ * ]]> te.entrust_price) between te.entrust_min_price
+            AND
+            IF (
+            te.entrust_max_price  <![CDATA[ > ]]> te.day_limit,
+            te.day_limit,
+            te.entrust_max_price
+            )
+            AND te.remain_num  <![CDATA[ > ]]> (
+            #{numCondit} <![CDATA[ + ]]> #{numCondit} <![CDATA[ * ]]> te.poundage_scale
+            )
+        </if>
+    </select>
+    <!-- 匹配卖单通过金额
+    手续费  (#{moneyCondit} <![CDATA[ / ]]> te.entrust_price) <![CDATA[ * ]]> te.poundage_scale
+    实际最大限额 if(te.entrust_max_price <![CDATA[ > ]]> te.day_limit,
+  te.day_limit,te.entrust_max_price)
+  必要条件:剩余数量小于最小交易额度的时候承兑商不显示了 (te.remain_num * te.entrust_price)
+   <![CDATA[ > ]]> te.entrust_min_price
+
+  1级条件，支付方式，委托方式,货币方式
+  2,传入数量，和剩余数量比较,用数据库的单价乘以数量，最小限额要比这个数据小，实际最大限额要比这个数据大
+  3,传入金额,最小限额要比传入金额小,实际最大限额要比传入金额大,传入金额除以单价要比剩余数量小
+    -->
+    <!--在满足上面条件的记录中，找一个最低价格，然后在满足最低价格的基础上，把最低价格作为条件继续查询-->
+    <select id="matchEntrust" parameterType="com.saiyun.model.Entrust" resultMap="BaseResultMap">
+        select
+        ten.entrust_id,
+        ten .entrust_no,
+        ten.user_id,
+        ten.money_Type,
+        ten.coin_no,
+        ten.entrust_type,
+        ten.entrust_price,
+        ten.day_limit,
+        ten.entrust_min_price,
+        ten.entrust_max_price,
+        ten.entrust_num,
+        ten.remain_num,
+        ten.deal_num,
+        ten.match_num,
+        ten.cancel_num,
+        ten.poundage,
+        ten.poundage_scale,
+        ten.state,
+        ten.remark,
+        ten.creat_date,
+        ten.wechat,
+        ten.alipay,
+        ten.bankcard
+        from t_entrust ten
+        where ten.state = 0
+        <if test="minPriceCondit != null and minPriceCondit != ''">
+            and ten.entrust_price in(
+            #{minPriceCondit}
+            )
+        </if>
+
+        and
+        (ten.remain_num * ten.entrust_price) <![CDATA[ > ]]> ten.entrust_min_price
+        and ten.entrust_type = #{entrustType}
+        <!--每日限额小于最小交易额度的不显示-->
+        and ten.day_limit>ten.entrust_min_price
+        <if test="coinNo != null and coinNo != ''">
+            and ten.coin_no = #{coinNo}
+        </if>
+        <!--   是否支持微信，等方式,不为空表示支持 -->
+        <if test="wechat != null and wechat != '' and wechat != '' ">
+            and ten.wechat IS NOT NULL
+        </if>
+        <if test="alipay != null and alipay != ''  and alipay != '' ">
+            and ten.alipay IS NOT NULL
+        </if>
+        <if test="bankcard != null and bankcard != ''  and bankcard != '' ">
+            and ten.bankcard IS NOT NULL
+        </if>
+        <!-- 人民币或者欧元 -->
+        <if test="moneyType != null and moneyType != '' ">
+            and ten.money_type = #{moneyType}
+        </if>
+        <!-- 最小限额要比传入金额小,实际最大限额要比传入金额大,
+        传入金额除以单价加上手续费要比剩余数量小
+        -->
+        <if test="moneyCondit != null and moneyCondit != '' ">
+            AND #{moneyCondit} between ten.entrust_min_price
+            AND
+            IF (
+            ten.entrust_max_price  <![CDATA[ > ]]> ten.day_limit,
+            ten.day_limit,
+            ten.entrust_max_price
+            )
+            AND ten.remain_num  <![CDATA[ > ]]> (
+            (
+            #{moneyCondit} <![CDATA[ / ]]> ten.entrust_price
+            )  <![CDATA[ + ]]> ((
+            #{moneyCondit} <![CDATA[ / ]]> ten.entrust_price)
+            <![CDATA[ * ]]> ten.poundage_scale)
+            )
+        </if>
+        <if test="numCondit != null and numCondit != '' ">
+            and (#{numCondit} <![CDATA[ * ]]> ten.entrust_price) between ten.entrust_min_price
+            AND
+            IF (
+            ten.entrust_max_price  <![CDATA[ > ]]> ten.day_limit,
+            ten.day_limit,
+            ten.entrust_max_price
+            )
+            AND ten.remain_num  <![CDATA[ > ]]> (
+            #{numCondit} <![CDATA[ + ]]> #{numCondit} <![CDATA[ * ]]> ten.poundage_scale
+            )
+        </if>
+    </select>
+    <select id="checkByEntrustId"  resultMap="BaseResultMap">
+        select
+        ten.entrust_id,
+        ten .entrust_no,
+        ten.user_id,
+        ten.money_Type,
+        ten.coin_no,
+        ten.entrust_type,
+        ten.entrust_price,
+        ten.day_limit,
+        ten.entrust_min_price,
+        ten.entrust_max_price,
+        ten.entrust_num,
+        ten.remain_num,
+        ten.deal_num,
+        ten.match_num,
+        ten.cancel_num,
+        ten.poundage,
+        ten.poundage_scale,
+        ten.state,
+        ten.remark,
+        ten.creat_date,
+        ten.wechat,
+        ten.alipay,
+        ten.bankcard
+        from t_entrust ten
+        where ten.state = 0
+        and ten.entrust_id = #{entrustId}
+        and
+        (ten.remain_num * ten.entrust_price) <![CDATA[ > ]]> ten.entrust_min_price
+        and ten.entrust_type = '1'
+        <!--每日限额小于最小交易额度的不显示-->
+        and ten.day_limit>ten.entrust_min_price
+
+        <!-- 最小限额要比传入金额小,实际最大限额要比传入金额大,
+        传入金额除以单价加上手续费要比剩余数量小
+        -->
+            AND #{money} between ten.entrust_min_price
+            AND
+            IF (
+            ten.entrust_max_price  <![CDATA[ > ]]> ten.day_limit,
+            ten.day_limit,
+            ten.entrust_max_price
+            )
+            AND ten.remain_num  <![CDATA[ > ]]> (
+            (
+            #{money} <![CDATA[ / ]]> ten.entrust_price
+            )  <![CDATA[ + ]]> ((
+            #{money} <![CDATA[ / ]]> ten.entrust_price)
+            <![CDATA[ * ]]> ten.poundage_scale)
+            )
+
+    </select>
+    <!--TODO:没有排序
+    -->
+    <select id="selectByEntrust" parameterType="com.saiyun.model.Entrust" resultMap="BaseResultMap">
+        SELECT
+        te.remain_num,
+        IFNULL(
+        (
+        SELECT
+        coin_name
+        FROM
+        t_coin
+        WHERE
+        coin_no = te.coin_no
+        ),
+        ''
+        ) AS coin_no,
+        te.entrust_min_price,
+        <!-- 如果当日限额比最大限额小，则当日限额就是最大限额 -->
+        if(te.entrust_max_price <![CDATA[ > ]]> te.day_limit,te.day_limit,te.entrust_max_price)
+        as entrust_max_price,
+        te.entrust_price,
+        te.wechat,
+        te.alipay,
+        te.bankcard,
+        te.entrust_id,
+        te.user_id,
+        te.entrust_type,
+        te.money_Type
+        FROM
+        t_entrust te
+        <where>
+            te.state = 0
+            <!-- todo:在该模块功能完成后，遍历所有方法，当每日限额小于最小交易额度的记录不予显示-->
+            <if test="entrustType != null and entrustType !='' ">
+                and entrust_type = #{entrustType}
+            </if>
+            <if test="coinNo !=null and coinNo !='' ">
+                and te.coin_no = #{coinNo}
+            </if>
+            <!--   是否支持微信，等方式,不为空表示支持 -->
+            <if test="wechat != null and wechat != '' ">
+                and te.wechat =1
+            </if>
+            <if test="alipay != null and alipay != '' ">
+                and te.alipay =1
+            </if>
+            <if test="bankcard != null and bankcard != '' ">
+                and te.bankcard =1
+            </if>
+
+            <!-- 人民币或者欧元 -->
+            <if test="moneyType != null and moneyType != '' ">
+                and te.money_type = #{moneyType}
+            </if>
+            <!-- 限额，传入金额要在最大限额和最小限额之间 -->
+            <if test="entrustMaxPrice != null and entrustMaxPrice != '' ">
+                and #{entrustMaxPrice} <![CDATA[ <= ]]> IF (
+                te.entrust_max_price  <![CDATA[ > ]]> te.day_limit,
+                te.day_limit,
+                te.entrust_max_price
+                )
+            </if>
+            <if test="entrustMinPrice != null and entrustMinPrice != '' ">
+                and #{entrustMinPrice} <![CDATA[ >= ]]> te.entrust_min_price
+            </if>
+            <!--如果数量*单价小于最小限额，就不显示该记录 -->
+            and (te.remain_num * te.entrust_price) <![CDATA[ > ]]> te.entrust_min_price
+            <!--每日限额小于最小交易额度的不显示-->
+            and te.day_limit>te.entrust_min_price
+        </where>
+    </select>
+    <select id="getByCondition" resultMap="BaseResultMap">
+        SELECT
+        te.entrust_id,
+        te.entrust_no,
+        IFNULL((select nickname from t_user where user_id = te.user_id ),'') as user_id,
+        te.money_Type,
+        IFNULL((SELECT coin_name from t_coin where coin_no = te.coin_no),'') as coin_no,
+        te.entrust_type,
+        te.entrust_price,
+        te.day_limit,
+        te.entrust_min_price,
+        te.entrust_max_price,
+        te.entrust_num,
+        te.remain_num,
+        te.deal_num,
+        te.match_num,
+        te.cancel_num,
+        te.poundage,
+        te.poundage_scale,
+        te.state,
+        te.remark,
+        te.creat_date,
+        te.wechat,
+        te.alipay,
+        te.bankcard
+        FROM
+        t_entrust te
+        <where>
+            <if test="userId != null and userId !='' ">
+                and te.user_id = #{userId}
+            </if>
+        </where>
+    </select>
+    <delete id="deleteByPrimaryKey">
+    delete from t_entrust
+    where entrust_id = #{entrustId}
+  </delete>
+    <insert id="insert" parameterType="com.saiyun.model.Entrust">
+    insert into t_entrust (entrust_id, entrust_no, user_id, 
+      money_Type, coin_no, entrust_type, 
+      entrust_price, day_limit, entrust_min_price, 
+      entrust_max_price, entrust_num, remain_num, 
+      deal_num, match_num, cancel_num, 
+      poundage, poundage_scale, state, 
+      remark, creat_date, wechat, 
+      alipay, bankcard)
+    values (#{entrustId}, #{entrustNo}, #{userId}, 
+      #{moneyType}, #{coinNo}, #{entrustType}, 
+      #{entrustPrice}, #{dayLimit}, #{entrustMinPrice}, 
+      #{entrustMaxPrice}, #{entrustNum}, #{remainNum}, 
+      #{dealNum}, #{matchNum}, #{cancelNum}, 
+      #{poundage}, #{poundageScale}, #{state}, 
+      #{remark}, #{creatDate}, #{wechat}, 
+      #{alipay}, #{bankcard})
+  </insert>
+    <insert id="insertSelective" parameterType="com.saiyun.model.Entrust">
+        insert into t_entrust
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="entrustId != null">
+                entrust_id,
+            </if>
+            <if test="entrustNo != null">
+                entrust_no,
+            </if>
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="moneyType != null">
+                money_Type,
+            </if>
+            <if test="coinNo != null">
+                coin_no,
+            </if>
+            <if test="entrustType != null">
+                entrust_type,
+            </if>
+            <if test="entrustPrice != null">
+                entrust_price,
+            </if>
+            <if test="dayLimit != null">
+                day_limit,
+            </if>
+            <if test="entrustMinPrice != null">
+                entrust_min_price,
+            </if>
+            <if test="entrustMaxPrice != null">
+                entrust_max_price,
+            </if>
+            <if test="entrustNum != null">
+                entrust_num,
+            </if>
+            <if test="remainNum != null">
+                remain_num,
+            </if>
+            <if test="dealNum != null">
+                deal_num,
+            </if>
+            <if test="matchNum != null">
+                match_num,
+            </if>
+            <if test="cancelNum != null">
+                cancel_num,
+            </if>
+            <if test="poundage != null">
+                poundage,
+            </if>
+            <if test="poundageScale != null">
+                poundage_scale,
+            </if>
+            <if test="state != null">
+                state,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+            <if test="creatDate != null">
+                creat_date,
+            </if>
+            <if test="wechat != null and wechat != ''">
+                wechat,
+            </if>
+            <if test="alipay != null and alipay != '' ">
+                alipay,
+            </if>
+            <if test="bankcard != null and bankcard != '' ">
+                bankcard,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="entrustId != null">
+                #{entrustId},
+            </if>
+            <if test="entrustNo != null">
+                #{entrustNo},
+            </if>
+            <if test="userId != null">
+                #{userId},
+            </if>
+            <if test="moneyType != null">
+                #{moneyType},
+            </if>
+            <if test="coinNo != null">
+                #{coinNo},
+            </if>
+            <if test="entrustType != null">
+                #{entrustType},
+            </if>
+            <if test="entrustPrice != null">
+                #{entrustPrice},
+            </if>
+            <if test="dayLimit != null">
+                #{dayLimit},
+            </if>
+            <if test="entrustMinPrice != null">
+                #{entrustMinPrice},
+            </if>
+            <if test="entrustMaxPrice != null">
+                #{entrustMaxPrice},
+            </if>
+            <if test="entrustNum != null">
+                #{entrustNum},
+            </if>
+            <if test="remainNum != null">
+                #{remainNum},
+            </if>
+            <if test="dealNum != null">
+                #{dealNum},
+            </if>
+            <if test="matchNum != null">
+                #{matchNum},
+            </if>
+            <if test="cancelNum != null">
+                #{cancelNum},
+            </if>
+            <if test="poundage != null">
+                #{poundage},
+            </if>
+            <if test="poundageScale != null">
+                #{poundageScale},
+            </if>
+            <if test="state != null">
+                #{state},
+            </if>
+            <if test="remark != null">
+                #{remark},
+            </if>
+            <if test="creatDate != null">
+                #{creatDate},
+            </if>
+            <if test="wechat != null and wechat != ''">
+                #{wechat},
+            </if>
+            <if test="alipay != null and alipay != '' ">
+                #{alipay},
+            </if>
+            <if test="bankcard != null and bankcard != '' ">
+                #{bankcard},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.saiyun.model.Entrust">
+        update t_entrust
+        <set>
+            <if test="entrustNo != null">
+                entrust_no = #{entrustNo},
+            </if>
+            <if test="userId != null">
+                user_id = #{userId},
+            </if>
+            <if test="moneyType != null">
+                money_Type = #{moneyType},
+            </if>
+            <if test="coinNo != null">
+                coin_no = #{coinNo},
+            </if>
+            <if test="entrustType != null">
+                entrust_type = #{entrustType},
+            </if>
+            <if test="entrustPrice != null">
+                entrust_price = #{entrustPrice},
+            </if>
+            <if test="dayLimit != null">
+                day_limit = #{dayLimit},
+            </if>
+            <if test="entrustMinPrice != null">
+                entrust_min_price = #{entrustMinPrice},
+            </if>
+            <if test="entrustMaxPrice != null">
+                entrust_max_price = #{entrustMaxPrice},
+            </if>
+            <if test="entrustNum != null">
+                entrust_num = #{entrustNum},
+            </if>
+            <if test="remainNum != null">
+                remain_num = #{remainNum},
+            </if>
+            <if test="dealNum != null">
+                deal_num = #{dealNum},
+            </if>
+            <if test="matchNum != null">
+                match_num = #{matchNum},
+            </if>
+            <if test="cancelNum != null">
+                cancel_num = #{cancelNum},
+            </if>
+            <if test="poundage != null">
+                poundage = #{poundage},
+            </if>
+            <if test="poundageScale != null">
+                poundage_scale = #{poundageScale},
+            </if>
+            <if test="state != null">
+                state = #{state},
+            </if>
+            <if test="remark != null">
+                remark = #{remark},
+            </if>
+            <if test="creatDate != null">
+                creat_date = #{creatDate},
+            </if>
+            <if test="wechat != null and wechat != ''">
+                wechat = #{wechat},
+            </if>
+            <if test="alipay != null and alipay != '' ">
+                alipay = #{alipay},
+            </if>
+            <if test="bankcard != null and bankcard != '' ">
+                bankcard = #{bankcard},
+            </if>
+        </set>
+        where entrust_id = #{entrustId}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.saiyun.model.Entrust">
+    update t_entrust
+    set entrust_no = #{entrustNo},
+      user_id = #{userId},
+      money_Type = #{moneyType},
+      coin_no = #{coinNo},
+      entrust_type = #{entrustType},
+      entrust_price = #{entrustPrice},
+      day_limit = #{dayLimit},
+      entrust_min_price = #{entrustMinPrice},
+      entrust_max_price = #{entrustMaxPrice},
+      entrust_num = #{entrustNum},
+      remain_num = #{remainNum},
+      deal_num = #{dealNum},
+      match_num = #{matchNum},
+      cancel_num = #{cancelNum},
+      poundage = #{poundage},
+      poundage_scale = #{poundageScale},
+      state = #{state},
+      remark = #{remark},
+      creat_date = #{creatDate},
+      wechat = #{wechat},
+      alipay = #{alipay},
+      bankcard = #{bankcard}
+    where entrust_id = #{entrustId}
+  </update>
+</mapper>

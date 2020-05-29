@@ -1,6 +1,7 @@
 package com.saiyun.controller.console;
 
 import com.saiyun.core.utils.ShiroUtil;
+import com.saiyun.model.User;
 import com.saiyun.model.console.Admin;
 import com.saiyun.model.console.Menu;
 import com.saiyun.model.console.Role;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import tk.mybatis.mapper.entity.Example;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

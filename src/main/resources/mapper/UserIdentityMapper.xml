@@ -26,7 +26,7 @@
     from user_identity
     where user_identity_id = #{userIdentityId}
   </select>
-  <select id="selectOneByUser" parameterType="java.lang.String" resultMap="BaseResultMap">
+  <select id="selectOneByUserId" parameterType="java.lang.String" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
     from user_identity

@@ -10,7 +10,7 @@ server:
 #日志配置 等级由低到高：debug<info<warn<Error<Fatal
 logging:
   level:
-    com.geekcattle : debug
+    com.saiyun : debug
   file : "${user.home}/logs/spring-boot-logging.log"
 
 management:

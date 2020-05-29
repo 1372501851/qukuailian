@@ -22,6 +22,12 @@
     from reception_account
     where account_id = #{accountId}
   </select>
+  <select id="getByUserId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from reception_account
+    where user_id = #{userId} and status = '1'
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from reception_account
     where account_id = #{accountId}

@@ -17,5 +17,5 @@ public interface UserIdentityMapper {
 
     int updateByPrimaryKey(UserIdentity record);
 
-    UserIdentity selectByUsrId(String userId);
+    UserIdentity selectOneByUserId(String userId);
 }

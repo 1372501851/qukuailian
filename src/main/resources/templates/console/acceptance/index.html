@@ -1,0 +1,96 @@
+<!DOCTYPE HTML>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:include="console/header">
+</head>
+<body>
+<section class="content-header">
+    <h1>承兑商管理</h1>
+    <small>承兑商管理</small>
+</section>
+<section class="content table-content">
+    <table id="dataGrid"></table>
+</section>
+<div th:include="console/footer"></div>
+</body>
+<script type="text/javascript">
+    $table = $("#dataGrid");
+    $(function () {
+        initDataGrid();
+    });
+    function initDataGrid(){
+        $table.bootstrapTable({
+            height : tableModel.getHeight(),
+            idField : "acceptId",
+            columns : [
+                {title: "管理员昵称", field: "adminUsername" },
+                {title: "用户昵称", field: "username"},
+                {title: "每日限额", field: "dayLimit"},
+                {title: "操作", field: "operate", align: 'center', events: operateEvents, formatter: operateFormatter}
+            ],
+            url : '/console/acceptance/list',
+            queryParams: function(params){
+                return params;
+            },
+            responseHandler : function (res) {
+                return {
+                    rows : res.result.pageInfo.list,
+                    total : res.result.pageInfo.total
+                }
+            },
+            search : true,
+            searchOnEnterKey : true,
+            sortName : 'day_limit',
+            sortOrder : 'asc',
+            pagination : true,
+            sidePagination : 'server',
+            pageSize: 20,
+            pageList : [20, 40, 50, 100],
+            showRefresh : true,
+            showToggle : true
+        });
+    }
+
+    function operateFormatter(value, row, index) {
+        return [
+
+            '<a href="/console/acceptance/from?acceptanceId='+row.acceptId+'" >',
+            '<i class="glyphicon glyphicon-edit"></i>修改',
+            '</a>  ',
+            '<a class="queren" href="javascript:void(0);" >',
+            '<i class="glyphicon glyphicon-edit"></i>指定用戶',
+            '</a>&nbsp;  ',
+
+        ].join('');
+    }
+
+    window.operateEvents = {
+
+    'click .queren':function(e,value,row,index){
+        layer.open({
+            type: 2,
+            title: '用户列表',
+            btn: ['确定', '取消'],
+            shadeClose: true,
+            shade: false,
+            maxmin: true, //开启最大化最小化按钮
+            area: ['500px', '560px'],
+            content: '/console/acceptance/sysuserpage',
+            yes : function(index, layero){
+                var iframeWin = window[layero.find('iframe')[0]['name']];
+                var userid =  iframeWin.getUserid();
+                var json = {};
+                json["userId"] = userid;
+                json["acceptanceId"] = row.acceptId;
+                urlModel.sendPost("/console/acceptance/update",json,"json")
+                $(".display").hide();
+                layer.close(index);
+            },
+            btn2: function(index) {
+                layer.close(index);
+            }
+        });
+    }
+    };
+</script>
+</html>

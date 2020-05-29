@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.saiyun.mapper.AcceptanceMapper">
+  <resultMap id="BaseResultMap" type="com.saiyun.model.Acceptance">
+    <id column="acceptance_id"  property="acceptanceId" />
+    <result column="user_id"  property="userId" />
+    <result column="admin_id"  property="adminId" />
+    <result column="day_limit"  property="dayLimit" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    acceptance_id, user_id, admin_id, day_limit
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_acceptance
+    where acceptance_id = #{acceptanceId}
+  </select>
+  <select id="selectAll"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_acceptance
+  </select>
+  <select id="selectByAcceptance"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_acceptance
+    <where>
+      <if test="acceptanceId != null">
+        and acceptance_id = #{acceptanceId}
+      </if>
+      <if test="userId != null">
+        and user_id = #{userId}
+      </if>
+      <if test="adminId != null">
+        and admin_id = #{adminId}
+      </if>
+      <if test="dayLimit != null">
+        and day_limit = #{dayLimit}
+      </if>
+    </where>
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from t_acceptance
+    where acceptance_id = #{acceptanceId}
+  </delete>
+  <insert id="insert" parameterType="com.saiyun.model.Acceptance">
+    insert into t_acceptance (acceptance_id, user_id, admin_id, 
+      day_limit)
+    values (#{acceptanceId}, #{userId}, #{adminId}, 
+      #{dayLimit})
+  </insert>
+  <insert id="insertSelective" parameterType="com.saiyun.model.Acceptance">
+    insert into t_acceptance
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="acceptanceId != null">
+        acceptance_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="adminId != null">
+        admin_id,
+      </if>
+      <if test="dayLimit != null">
+        day_limit,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="acceptanceId != null">
+        #{acceptanceId},
+      </if>
+      <if test="userId != null">
+        #{userId},
+      </if>
+      <if test="adminId != null">
+        #{adminId},
+      </if>
+      <if test="dayLimit != null">
+        #{dayLimit},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.saiyun.model.Acceptance">
+    update t_acceptance
+    <set>
+      <if test="userId != null">
+        user_id = #{userId},
+      </if>
+      <if test="adminId != null">
+        admin_id = #{adminId},
+      </if>
+      <if test="dayLimit != null">
+        day_limit = #{dayLimit},
+      </if>
+    </set>
+    where acceptance_id = #{acceptanceId}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.saiyun.model.Acceptance">
+    update t_acceptance
+    set user_id = #{userId},
+      admin_id = #{adminId},
+      day_limit = #{dayLimit}
+    where acceptance_id = #{acceptanceId}
+  </update>
+</mapper>

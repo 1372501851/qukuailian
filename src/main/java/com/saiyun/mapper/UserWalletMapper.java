@@ -1,20 +1,48 @@
 package com.saiyun.mapper;
 
+
 import com.saiyun.model.UserWallet;
-import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Map;
 
 public interface UserWalletMapper {
-    int deleteByPrimaryKey(Long userWalletId);
 
-    int insert(UserWallet record);
+	int insertUserWallets(List<UserWallet> userWallets);
 
-    int insertSelective(UserWallet record);
+	int updateUserWalletByCondition(UserWallet userWallet);
 
-    UserWallet selectByPrimaryKey(Long userWalletId);
+	UserWallet getUserWalletByCondition(UserWallet userWallet);
 
-    int updateByPrimaryKeySelective(UserWallet record);
+	List<UserWallet> getUserWalletByConditions(UserWallet userWallet);
 
-    int updateByPrimaryKey(UserWallet record);
+	UserWallet getUserWalletByConditionForUpdate(UserWallet userWallet);
 
-    UserWallet selectOneByUserId(String userId);
+	List<UserWallet> getuserWallet(Long userId);
+
+	List<UserWallet> getuserWalletStates(Long userId);
+
+	Long editState(UserWallet userWallet);
+
+	List<UserWallet> queryByUserAndOpen(Long userId);
+
+	UserWallet queryByUserState(Map<String, Object> params);
+
+	int updateBalance(UserWallet userWallet);
+
+	List<UserWallet> getAllUserWallet();
+
+	List<UserWallet> getUserWalletByAddress(String address);
+
+	int delUserWalletById(long walletId);
+
+	int userWalletCount(Map<String, Object> params);
+
+	int add(UserWallet userWallet);
+
+	int updateThisWallet(UserWallet userWallet);
+
+	List<UserWallet> getAllUserWalletWithoutPTN();
+
+	int insertUserWallet(UserWallet userWallet);
 }

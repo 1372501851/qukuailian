@@ -1,0 +1,59 @@
+<!DOCTYPE HTML>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:include="console/header">
+</head>
+<body>
+<section class="content-header">
+    <h1>用户列表</h1>
+</section>
+<section class="content table-content">
+    <table id="dataGrid"></table>
+</section>
+<div id="toolbar">
+</div>
+<div th:include="console/footer"></div>
+
+
+<script type="text/javascript" th:inline="javascript">
+    $table = $("#dataGrid");
+    $(function () {
+        initDataGrid();
+    });
+    function initDataGrid(){
+        $table.bootstrapTable({
+            height : tableModel.getHeight(),
+            idField : "userId",
+            columns: [
+                {title: "选择", field: "smallPrice",formatter:function(value,row,index){
+					return "<input type='radio' name='userId' value='"+row.userId+"'>"
+                }
+                },
+                {title: "用户昵稱", field: "nickname"},
+                {title: "用户手機號", field: "phone"},
+            ],
+            url: '/console/acceptance/sysuser',
+            responseHandler : function (res) {
+                return {
+                    rows : res.result.pageInfo.list,
+                    total : res.result.pageInfo.total
+                }
+            },
+            pagination : true,
+            sidePagination : 'server',
+            pageSize: 20,
+            pageList : [20, 40, 50, 100],
+            toolbar : "#toolbar",
+            showRefresh : true,
+            showToggle : true
+        });
+    }
+	function getUserid(){
+		var userid = $('input:radio:checked').val();
+		return userid;
+	}
+
+</script>
+</body>
+</html>
+

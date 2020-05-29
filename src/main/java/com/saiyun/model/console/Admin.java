@@ -170,7 +170,7 @@ public class Admin extends BaseEntity implements Serializable {
                 ", createdAt='" + createdAt + '\'' +
                 ", updatedAt='" + updatedAt + '\'' +
                 ", sort='" + sort + '\'' +
-                ", order='" + order + '\'' +
+                ", Order='" + order + '\'' +
                 ", roleList=" + roleList +
                 '}';
     }

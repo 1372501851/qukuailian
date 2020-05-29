@@ -45,5 +45,4 @@ public class UserController {
         map.put("queryParam", member);
         return ReturnUtil.success("加载成功", map, null);
     }
-
 }

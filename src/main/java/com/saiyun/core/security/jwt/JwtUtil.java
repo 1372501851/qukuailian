@@ -2,6 +2,7 @@ package com.saiyun.core.security.jwt;
 
 import com.saiyun.core.security.CustomUser;
 import com.saiyun.util.JsonUtil;
+import com.saiyun.util.KeyId;
 import com.saiyun.util.UuidUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -158,7 +159,7 @@ public class JwtUtil {
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(subject)
-                .setId(UuidUtil.getUUID())
+                .setId(KeyId.nextId())
                 .setIssuedAt(new Date())
                 .setExpiration(generateExpirationDate(expiration))
                 .compressWith(CompressionCodecs.DEFLATE)

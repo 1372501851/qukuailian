@@ -1,3 +1,54 @@
+var urlModel = (function (){
+    return {
+        sendPost:function(url,data,type){
+            if(!type){
+                type='json'
+            }
+            $.post(
+                url,
+                data,
+                function(data,state){
+                    debugger;
+                    console.log(data);
+                    if (data.status){
+                        layer.msg(data.msg, {icon: 1});
+                    } else {
+                        layer.msg(data.msg, {icon: 2});
+                    }
+                },
+                type
+            )
+        },
+        sendJson:function(url,data){
+            $.ajax({
+                url:url,
+                type:'post',
+                dataType:'json',
+                contentType:'application/json;charset=UTF-8',
+                data:data,
+                success:function(data,status){
+                    console.log(data);
+                    if (data.status){
+                        layer.msg(data.msg, {icon: 1});
+                    } else {
+                        layer.msg(data.msg, {icon: 2});
+                    }
+                }
+            })
+        }
+    }
+})();
+var imgModel = (function (){
+    return {
+        uploadModel:function(inputId,title){
+            uploadModel.open_upload_dialog(title,function(layero,files){
+                var imgurl = files[0].preview_url;
+                $('#'+inputId).val();
+                $('#'+inputId).val(imgurl.substr(imgurl.indexOf('/static')));
+            },'',0,'image');
+        }
+    }
+})();
 var tableModel = (function () {
     return{
         getHeight : function () {

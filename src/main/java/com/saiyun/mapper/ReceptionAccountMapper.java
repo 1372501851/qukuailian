@@ -2,6 +2,8 @@ package com.saiyun.mapper;
 
 import com.saiyun.model.ReceptionAccount;
 
+import java.util.List;
+
 public interface ReceptionAccountMapper {
     int deleteByPrimaryKey(String accountId);
 
@@ -14,4 +16,6 @@ public interface ReceptionAccountMapper {
     int updateByPrimaryKeySelective(ReceptionAccount record);
 
     int updateByPrimaryKey(ReceptionAccount record);
+
+    List<ReceptionAccount> getByUserId(String userId);
 }

@@ -14,7 +14,7 @@ public class AdminFormAuthenticationFilter extends FormAuthenticationFilter {
 
     @Override
     public void setSuccessUrl(String successUrl) {
-        super.setSuccessUrl("/console/index");
+        super.setSuccessUrl("/console/String");
     }
 
 }

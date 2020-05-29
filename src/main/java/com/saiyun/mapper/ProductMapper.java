@@ -1,9 +1,11 @@
 package com.saiyun.mapper;
 
 import com.saiyun.model.Product;
+import com.saiyun.model.vo.ProductVo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ProductMapper {
     int deleteByPrimaryKey(String productId);
@@ -18,5 +20,9 @@ public interface ProductMapper {
 
     int updateByPrimaryKey(Product record);
 
-    List<Product> getProductByType(@Param("bType") String bType,@Param("state")String state);
+    List<ProductVo> getProductByType(Product record);
+
+    Product matchMoney(Map<String, String> map);
+
+    Product matchAmount(Map<String, String> map);
 }

@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -395,5 +396,36 @@ public class ValidataUtil {
         String verifyCode = String
                 .valueOf(new Random().nextInt(899999) + 100000);//生成短信验证码
         return verifyCode;
+    }
+    /*
+    数字装换成百分比,默认只让小数点2位的数据生效
+     */
+    public static String transPercent(Double num){
+        NumberFormat percent = NumberFormat.getPercentInstance();
+        percent.setMaximumFractionDigits(2);
+        return percent.format(num);
+    }
+
+    public static boolean checkMoney(String money) {
+        Pattern pattern = Pattern.compile("^(([1-9]{1}\\d*)|([0]{1}))(\\.(\\d){0,2})?$"); // 判断小数点后2位的数字的正则表达式
+        Matcher match = pattern.matcher(money);
+        return match.matches();
+    }
+    public static boolean checkMoney(String str,Integer length) {
+        Pattern pattern = Pattern.compile("^(([1-9]{1}\\d*)|([0]{1}))(\\.(\\d){0,"+length+"})?$"); // 判断小数点后length位的数字的正则表达式
+        Matcher match = pattern.matcher(str);
+        return match.matches();
+    }
+
+    public static boolean checkPayType(String payType) {
+        boolean flag = false;
+        if ("1".equals(payType)){
+            flag = true;
+        }else if("2".equals(payType)){
+            flag = true;
+        }else if("3".equals(payType)){
+            flag = true;
+        }
+        return flag;
     }
 }

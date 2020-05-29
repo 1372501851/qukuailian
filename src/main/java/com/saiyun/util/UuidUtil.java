@@ -13,7 +13,7 @@ public class UuidUtil {
      * @return String UUID
      */
     public static String getUUID() {
-        return UUID.randomUUID().toString().replace("-", "").toLowerCase();
+        return KeyId.nextId();
     }
 
     /**

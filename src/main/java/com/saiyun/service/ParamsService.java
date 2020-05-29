@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 @Service
 public class ParamsService {
@@ -33,6 +34,7 @@ public class ParamsService {
         //1usdt价值的eur
         BigDecimal oneUsdtEur = usdtTransCny.multiply(eurTransCny);
         bPriceVo.setUsdtEur(oneUsdtEur);
+        bPriceVo.setBtcUsdt(btcTransUsdt);
         return bPriceVo;
     }
 

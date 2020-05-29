@@ -4,6 +4,8 @@ import com.saiyun.core.CustomerMapper;
 import com.saiyun.model.User;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 public interface UserMapper {
     int deleteByPrimaryKey(String userId);
@@ -21,4 +23,8 @@ public interface UserMapper {
     User selectOneByUser(User user);
 
     void updateTokenNull(String token);
+
+    List<User> selectAll();
+
+    User getOneByUserType(String sysUserStr);
 }

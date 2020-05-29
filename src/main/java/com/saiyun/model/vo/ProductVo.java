@@ -3,24 +3,55 @@ package com.saiyun.model.vo;
 import com.saiyun.model.Product;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 public class ProductVo {
     private String iconUrl;
     private String nickname;
-    private String sales;
-    private String count;
-    private String succRate;
-    private String productId;
-    private String userId;
-    private String bType;
-    private BigDecimal amount;
-    private BigDecimal maxAmount;
-    private BigDecimal minAmount;
-    private String type;
-    private String name;
-    private String account;
-    private String imgUrl;
-    private String bankname;
+    private String deal;//交易次数
+    private String dealFail;//交易失败次数
+    private String succRate;//成功率
+    private String productId;//商品id
+    private String userId;//用户id
+    private BigDecimal amount;//商品数量
+    private BigDecimal maxAmount;//最多购买
+    private BigDecimal minAmount;//最少购买
+    private String wechat;
+    private String alipay;
+    private String bankcard;
+    private String astrict;
+
+    public String getWechat() {
+        return wechat;
+    }
+
+    public void setWechat(String wechat) {
+        this.wechat = wechat;
+    }
+
+    public String getAlipay() {
+        return alipay;
+    }
+
+    public void setAlipay(String alipay) {
+        this.alipay = alipay;
+    }
+
+    public String getBankcard() {
+        return bankcard;
+    }
+
+    public void setBankcard(String bankcard) {
+        this.bankcard = bankcard;
+    }
+
+    public String getAstrict() {
+        return astrict;
+    }
+
+    public void setAstrict(String astrict) {
+        this.astrict = astrict;
+    }
 
     public String getIconUrl() {
         return iconUrl;
@@ -36,22 +67,6 @@ public class ProductVo {
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
-    }
-
-    public String getSales() {
-        return sales;
-    }
-
-    public void setSales(String sales) {
-        this.sales = sales;
-    }
-
-    public String getCount() {
-        return count;
-    }
-
-    public void setCount(String count) {
-        this.count = count;
     }
 
     public String getSuccRate() {
@@ -78,14 +93,6 @@ public class ProductVo {
         this.userId = userId;
     }
 
-    public String getbType() {
-        return bType;
-    }
-
-    public void setbType(String bType) {
-        this.bType = bType;
-    }
-
     public BigDecimal getAmount() {
         return amount;
     }
@@ -110,43 +117,20 @@ public class ProductVo {
         this.minAmount = minAmount;
     }
 
-    public String getType() {
-        return type;
+    public String getDeal() {
+        return deal;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setDeal(String deal) {
+        this.deal = deal;
     }
 
-    public String getName() {
-        return name;
+    public String getDealFail() {
+        return dealFail;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setDealFail(String dealFail) {
+        this.dealFail = dealFail;
     }
 
-    public String getAccount() {
-        return account;
-    }
-
-    public void setAccount(String account) {
-        this.account = account;
-    }
-
-    public String getImgUrl() {
-        return imgUrl;
-    }
-
-    public void setImgUrl(String imgUrl) {
-        this.imgUrl = imgUrl;
-    }
-
-    public String getBankname() {
-        return bankname;
-    }
-
-    public void setBankname(String bankname) {
-        this.bankname = bankname;
-    }
 }

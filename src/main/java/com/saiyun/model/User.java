@@ -1,162 +1,146 @@
 package com.saiyun.model;
 
-import javax.persistence.*;
-import java.io.Serializable;
+import java.util.Date;
 
-public class User  implements Serializable {
-    /**
-     * 用户id
-     */
-    @Id
-    @Column(name = "user_id")
+public class User extends  BaseEntity{
     private String userId;
 
-    /**
-     * 用户昵称
-     */
     private String nickname;
 
-    /**
-     * 手机号
-     */
     private String phone;
 
-    /**
-     * 头像地址
-     */
-    @Column(name = "icon_url")
     private String iconUrl;
 
-    /**
-     * 二维码
-     */
-    @Column(name = "qr_code_url")
-    private String qrCodeUrl;
-
-
-
     private String password;
-    /**
-     * 一级认证 0,未认证, 1，已认证
-     */
+
+    private String tradePassword;
+
+    private String state;
+
+    private String token;
+
+    private String timeout;
+
+    private String createdate;
+
+    private String wechat;
+
+    private String alipay;
+
     private String oneAuth;
 
     private String twoAuth;
 
-    private String createdate;
+    private String areaCode;
 
-    private String token;
+    private String email;
+
+    private String userType;
+
+    private String bankcard;
+
+    public String getBankcard() {
+        return bankcard;
+    }
+
+    public void setBankcard(String bankcard) {
+        this.bankcard = bankcard;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname == null ? null : nickname.trim();
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone == null ? null : phone.trim();
+    }
+
+    public String getIconUrl() {
+        return iconUrl;
+    }
+
+    public void setIconUrl(String iconUrl) {
+        this.iconUrl = iconUrl == null ? null : iconUrl.trim();
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password == null ? null : password.trim();
+    }
+
+    public String getTradePassword() {
+        return tradePassword;
+    }
+
+    public void setTradePassword(String tradePassword) {
+        this.tradePassword = tradePassword == null ? null : tradePassword.trim();
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state == null ? null : state.trim();
+    }
 
     public String getToken() {
         return token;
     }
 
     public void setToken(String token) {
-        this.token = token;
+        this.token = token == null ? null : token.trim();
     }
 
-    /**
-     * 获取用户id
-     *
-     * @return user_id - 用户id
-     */
-    public String getUserId() {
-        return userId;
+    public String getTimeout() {
+        return timeout;
     }
 
-    /**
-     * 设置用户id
-     *
-     * @param userId 用户id
-     */
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setTimeout(String timeout) {
+        this.timeout = timeout;
     }
 
-    /**
-     * 获取用户昵称
-     *
-     * @return nickname - 用户昵称
-     */
-    public String getNickname() {
-        return nickname;
+    public String getCreatedate() {
+        return createdate;
     }
 
-    /**
-     * 设置用户昵称
-     *
-     * @param nickname 用户昵称
-     */
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
+    public void setCreatedate(String createdate) {
+        this.createdate = createdate;
     }
 
-    /**
-     * 获取手机号
-     *
-     * @return phone - 手机号
-     */
-    public String getPhone() {
-        return phone;
+    public String getWechat() {
+        return wechat;
     }
 
-    /**
-     * 设置手机号
-     *
-     * @param phone 手机号
-     */
-    public void setPhone(String phone) {
-        this.phone = phone;
+    public void setWechat(String wechat) {
+        this.wechat = wechat == null ? null : wechat.trim();
     }
 
-    /**
-     * 获取头像地址
-     *
-     * @return icon_url - 头像地址
-     */
-    public String getIconUrl() {
-        return iconUrl;
+    public String getAlipay() {
+        return alipay;
     }
 
-    /**
-     * 设置头像地址
-     *
-     * @param iconUrl 头像地址
-     */
-    public void setIconUrl(String iconUrl) {
-        this.iconUrl = iconUrl;
-    }
-
-    /**
-     * 获取二维码
-     *
-     * @return qr_code_url - 二维码
-     */
-    public String getQrCodeUrl() {
-        return qrCodeUrl;
-    }
-
-    /**
-     * 设置二维码
-     *
-     * @param qrCodeUrl 二维码
-     */
-    public void setQrCodeUrl(String qrCodeUrl) {
-        this.qrCodeUrl = qrCodeUrl;
-    }
-
-    /**
-     * @return password
-     */
-    public String getPassword() {
-        return password;
-    }
-
-    /**
-     * @param password
-     */
-    public void setPassword(String password) {
-        this.password = password;
+    public void setAlipay(String alipay) {
+        this.alipay = alipay == null ? null : alipay.trim();
     }
 
     public String getOneAuth() {
@@ -172,14 +156,30 @@ public class User  implements Serializable {
     }
 
     public void setTwoAuth(String twoAuth) {
-        this.twoAuth = twoAuth;
+        this.twoAuth = twoAuth == null ? null : twoAuth.trim();
     }
 
-    public String getCreatedate() {
-        return createdate;
+    public String getAreaCode() {
+        return areaCode;
     }
 
-    public void setCreatedate(String createdate) {
-        this.createdate = createdate;
+    public void setAreaCode(String areaCode) {
+        this.areaCode = areaCode == null ? null : areaCode.trim();
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email == null ? null : email.trim();
+    }
+
+    public String getUserType() {
+        return userType;
+    }
+
+    public void setUserType(String userType) {
+        this.userType = userType == null ? null : userType.trim();
     }
 }

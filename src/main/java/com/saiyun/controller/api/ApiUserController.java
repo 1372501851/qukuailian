@@ -1,6 +1,7 @@
 package com.saiyun.controller.api;
 
 import com.saiyun.annotation.TokenRequired;
+import com.saiyun.exception.TokenException;
 import com.saiyun.model.ReceptionAccount;
 import com.saiyun.model.User;
 import com.saiyun.service.RegisAndLoginService;
@@ -10,7 +11,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
-import sun.reflect.generics.tree.Tree;
 
 import java.util.Date;
 import java.util.Map;
@@ -38,9 +38,10 @@ public class ApiUserController {
             String token = (String) map.get("token");
             String code = (String) map.get("code");
             String password = (String) map.get("password");
+            String areaCode = (String) map.get("area_code");//区号
             User user = userService.getUserByToken(token);
             String changePasswordScene = "3";
-            String cacheCode = regisAndLoginService.getCacheCode(user.getPhone(), changePasswordScene);
+            String cacheCode = regisAndLoginService.getCacheCode(user.getPhone(), changePasswordScene, areaCode);
             if(cacheCode == null || !cacheCode.equals(code)){
                 return ReturnUtil.error("验证码不正确");
             }
@@ -70,8 +71,9 @@ public class ApiUserController {
             String phone = (String) map.get("phone");
             String code = (String) map.get("code");
             String password = (String) map.get("password");
+            String areaCode = (String)map.get("area_code");//区号
             String retrievePasswordScene = "4";
-            String cacheCode = regisAndLoginService.getCacheCode(phone, retrievePasswordScene);
+            String cacheCode = regisAndLoginService.getCacheCode(phone, retrievePasswordScene, areaCode);
 
             if(cacheCode == null || !cacheCode.equals(code)){
                 return ReturnUtil.error("验证码不正确");
@@ -118,6 +120,7 @@ public class ApiUserController {
      * @param map
      * @return
      */
+    @PostMapping("logout")
     @TokenRequired
     public ModelMap logout(@RequestBody TreeMap<String,Object> map){
         try{
@@ -136,16 +139,12 @@ public class ApiUserController {
      * @return
      */
     @RequestMapping(value = "isAuth",method = RequestMethod.POST)
-    public ModelMap oneAuth(@RequestBody TreeMap<String,Object> map){
-        try{
+    @TokenRequired
+    public ModelMap oneAuth(@RequestBody TreeMap<String,Object> map) throws TokenException {
             String token = map.get("token").toString();
             User userByToken = userService.getUserByToken(token);
-            Map returnMap = userService.isAuth(userByToken.getUserId());
+            Map returnMap = userService.isAuth(userByToken);
             return ReturnUtil.success("请求成功",returnMap);
-        }catch (Exception e){
-            e.printStackTrace();
-            return ReturnUtil.error("后台错误，请联系管理员");
-        }
     }
 
     /**
@@ -212,5 +211,11 @@ public class ApiUserController {
             return ReturnUtil.error("后台错误，请联系管理员");
         }
     }
+//    @RequestMapping("getUserByToken")
+//    @TokenRequired
+//    public ModelMap getUserByToken(@RequestBody TreeMap<String,Object> map){
+//        String token = (String) map.get("token");
+//
+//    }
 
 }

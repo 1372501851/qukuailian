@@ -1,9 +1,11 @@
 package com.saiyun.controller.console;
 
 import com.saiyun.core.shiro.AdminShiroRealm;
+import com.saiyun.model.Acceptance;
 import com.saiyun.model.console.Admin;
 import com.saiyun.model.console.AdminRole;
 import com.saiyun.model.console.Role;
+import com.saiyun.service.AcceptanceService;
 import com.saiyun.service.console.AdminRoleService;
 import com.saiyun.service.console.AdminService;
 import com.saiyun.service.console.RoleService;
@@ -49,6 +51,9 @@ public class AdminController {
 
     @Autowired
     private AdminShiroRealm adminShiroRealm;
+
+    @Autowired
+    private AcceptanceService acceptanceService;
 
     @RequiresPermissions("admin:index")
     @RequestMapping(value = "/index", method = {RequestMethod.GET})
@@ -115,7 +120,7 @@ public class AdminController {
                     return ReturnUtil.error(er.getDefaultMessage(), null, null);
                 }
             }
-            if (StringUtils.isEmpty(admin.getUid())) {
+            if (StringUtils.isEmpty(admin.getUid())) {//添加管理员
                 Example example = new Example(Admin.class);
                 example.createCriteria().andCondition("username = ", admin.getUsername());
                 Integer userCount = adminService.getCount(example);
@@ -135,7 +140,7 @@ public class AdminController {
                 admin.setCreatedAt(DateUtil.getCurrentTime());
                 admin.setUpdatedAt(DateUtil.getCurrentTime());
                 adminService.insert(admin);
-            } else {
+            } else {//修改管理员
                 Admin updateAdmin = adminService.getById(admin.getUid());
                 if (!"null".equals(updateAdmin)) {
                     admin.setSalt(updateAdmin.getSalt());
@@ -154,6 +159,17 @@ public class AdminController {
             if (admin.getRoleId() != null) {
                 adminRoleService.deleteAdminId(admin.getUid());
                 for (String roleid : admin.getRoleId()) {
+                    if("05366092659d4d169fbc32c11f695bc2".equals(roleid)){
+                        //添加到承兑商表
+                        Acceptance acceptance = new Acceptance();
+                        acceptance.setAdminId(admin.getUid());
+                        Acceptance oneByAcceptance = acceptanceService.getOneByAcceptance(acceptance);
+                        if (oneByAcceptance == null ){
+                            acceptance.setAcceptanceId(KeyId.nextId());
+                            acceptanceService.insertAcceptance(acceptance);
+                        }
+
+                    }
                     AdminRole adminRole = new AdminRole();
                     adminRole.setAdminId(admin.getUid());
                     adminRole.setRoleId(roleid);
